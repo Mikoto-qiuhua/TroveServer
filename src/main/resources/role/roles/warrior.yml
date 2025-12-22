@@ -1,0 +1,192 @@
+#是否隐藏该角色
+Hide: false
+
+#测试模式 也可以是试用角色 开启后 该角色的数据不会进行存储
+#也无法修改这个角色的任何信息
+TestModel: false
+
+Head:
+  custom_name: "&f骑士 Lv.<role_level> (<role_state>&f)" #展示名称
+  material: "player_head" #物品材质
+
+ArmsModelId: "warrior.bbmodel"
+
+#等级机制
+Level:
+  #基础等级
+  base: 1
+  #经验来源追踪 是用于获取指定来源的经验 例如mm技能那边给予的经验就有这个经验组id  如果你填写了mm 下方也有mm 那才能给这个角色加经验
+  # 原版经验为exp
+  trace:
+    - "exp"
+    - "mm"
+  # 关键等级设置
+  # 只需对关键等级进行修改, 处于非关键等级时将自动读取下一个关键等级的信息
+  key:
+    10:
+      condition:
+      action:
+      exp: 30
+    25:
+      condition:
+      action:
+      exp: 50
+
+#装备机制
+Equip:
+  #key本身没有限制 但会有一些默认的功能
+  #arms 会发放武器到快捷栏 并且会渲染动画用的模型
+  arms:
+    #在界面中显示的槽位id
+    slotId: 36
+    #这个槽位的类型 用于空物品时 会填充一个默认物品 这个会用于名字
+    equipType: "&f武器"
+    #js条件 具体的对象包在utils/script/wrapper包中查看
+    #player 玩家对象
+    #item 当前操作的物品对象
+    condition: |-
+      item.hasTag('Equip', '单手剑')
+    #默认的物品 调用物品库物品
+    #当玩家第一次获取角色时会使用这个物品填充
+    defaultItemId:
+  帽子:
+    slotId: 18 #在界面上的槽位位置
+    #这个槽位的类型
+    equipType: "&f帽子"
+    #js条件
+    condition: |-
+      item.hasTag('Equip', '烈焰宝石')
+    #初始物品ID 从物品库内拿取
+    defaultItemId:
+  上衣:
+    slotId: 27
+    equipType: "&f上衣"
+    condition: |-
+      item.hasTag('Equip', '烈焰宝石')
+    defaultItemId:
+  药水:
+    slotId: 35
+    equipType: "&f药水"
+    condition: |-
+      item.hasTag('Medicine', '烈焰宝石')
+    defaultItemId:
+  药水效果1:
+    slotId: 26
+    equipType: "&f药水效果"
+    condition: |-
+      item.hasTag('Effect', '烈焰宝石')
+    defaultItemId:
+  药水效果2:
+    slotId: 44
+    equipType: "&f药水效果"
+    condition: |-
+      item.hasTag('Effect', '烈焰宝石')
+    defaultItemId:
+
+  大型烈焰宝石:
+    slotId: 19
+    equipType: "&f大型烈焰宝石"
+    condition: |-
+      item.hasTag('Gem', '大型烈焰宝石')
+    defaultItemId:
+  小型烈焰宝石1:
+    slotId: 20
+    equipType: "&f小型烈焰宝石"
+    condition: |-
+      item.hasTag('Gem', '烈焰宝石')
+    defaultItemId:
+  小型烈焰宝石2:
+    slotId: 21
+    equipType: "&f小型烈焰宝石"
+    condition: |-
+      item.hasTag('Gem', '烈焰宝石')
+    defaultItemId:
+
+  大型苍穹宝石:
+    slotId: 25
+    equipType: "&f大型苍穹宝石"
+    condition: |-
+      item.hasTag('Gem', '大型苍穹宝石')
+    defaultItemId:
+  小型苍穹宝石1:
+    slotId: 24
+    equipType: "&f小型苍穹宝石"
+    condition: |-
+      item.hasTag('Gem', '苍穹宝石')
+    defaultItemId:
+  小型苍穹宝石2:
+    slotId: 23
+    equipType: "&f小型苍穹宝石"
+    condition: |-
+      item.hasTag('Gem', '苍穹宝石')
+    defaultItemId:
+
+  大型潮汐宝石:
+    slotId: 28
+    equipType: "&f大型潮汐宝石"
+    condition: |-
+      item.hasTag('Gem', '大型潮汐宝石')
+    defaultItemId:
+  小型潮汐宝石1:
+    slotId: 29
+    equipType: "&f小型潮汐宝石"
+    condition: |-
+      item.hasTag('Gem', '潮汐宝石')
+    defaultItemId:
+  小型潮汐宝石2:
+    slotId: 30
+    equipType: "&f小型潮汐宝石"
+    condition: |-
+      item.hasTag('Gem', '潮汐宝石')
+    defaultItemId:
+
+
+
+#角色升级的属性系统 必须添加 生命值 和 移动速度
+Attributes:
+  #属性key
+  最大生命值:
+    #自定义获取该属性的字符描述  如果不填或者没有这个参数 默认使用 属性key:属性值 的结果
+    #这里的用途就是给你百分比加成用的 例如"生命上限:{value}%"
+    string:
+    #属性的基础值
+    base: 15.0
+    #每级增加的值
+    per-level: 5.0
+    #最大值
+    max: 50.0
+    #最小值
+    min: 10.0
+  移动速度:
+    base: 1.1
+    per-level: 0
+  跳跃次数:
+    base: 15
+    per-level: 0
+  物理伤害:
+    base: 11.5
+    per-level: 0
+  暴击几率:
+    string: "暴击几率:{value}%"
+    base: 50
+    per-level: 0
+  暴击伤害:
+    string: "暴击伤害:{value}%"
+    base: 150
+    per-level: 0
+
+#所拥有的技能列表
+Skills:
+  #技能名称
+  warrior_attack_main:
+    #显示的槽位 没有则不显示
+    slot: 38
+    #触发器 -1=左键  其余为对应的快捷栏按键 正常情况只支持到0-3
+    #0为右键技能
+    #1-3为三个主动技能
+    trigger: -1
+    #元数据 会覆盖技能配置本身的那个数据
+    #技能配置那边的数据为全部默认使用的数据值 也可以添加自定义的
+    #仅支持基础类型数据
+    meta:
+

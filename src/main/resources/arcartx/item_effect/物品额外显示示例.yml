@@ -1,0 +1,22 @@
+# 显示在物品之前
+before:
+  texture:
+    type: text # 可用类型 texture | text
+    attribute:
+      xr: 0
+      yr: 0
+      text: ~啊啊啊啊啊啊
+      mode: 0 # 0: 左对齐, 1: 居中, 2: 右对齐
+      shadow: true
+      visible: true
+# 显示在物品之后
+after:
+  texture:
+    type: texture # 可用类型 texture | text
+    attribute:
+      xr: 0
+      yr: 0
+      wr: 1
+      hr: 1
+      visible: true
+      texture: ~255,255,255

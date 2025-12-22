@@ -1,0 +1,8 @@
+default:
+  normal: "waypoint/normal.png"
+  left: "waypoint/left.png"
+  right: "waypoint/right.png"
+  width: 40
+  height: 40
+  font: ""
+  fontSize: 32

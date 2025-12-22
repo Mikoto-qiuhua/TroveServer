@@ -1,0 +1,7 @@
+example:
+  # 图标id的取值范围是0 ~ 999999
+  id: 0
+  # 支持GIF/PNG
+  path: "Example.png"
+
+  # 不需要手动设置大小，ArcartX会根据图标长宽比在文字排列时仅限自动调整。

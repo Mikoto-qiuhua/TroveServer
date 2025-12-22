@@ -1,0 +1,18 @@
+# 资源配置
+encryptedResourceFiles:
+  Example:
+    # 填写位于“ArcartX/resource/”目录下的加密压缩文件(.zip)的名称
+    fileName: "resource.zip"
+    # 解压密码
+    password: "0502"
+# 客户端标题
+clientTitle: "欢迎使用Minestom-ArcartX,该标题可在setting.yml修改"
+
+# 检测设置
+crc64:
+  # 是否启用crc64检测
+  enable: false
+  # 是否是全匹配模式
+  # 如果是 则需要完全匹配 如果不是 则允许缺少一部分
+  allowPartial: false
+  list:

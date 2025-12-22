@@ -1,0 +1,18 @@
+root_control:
+  type: card
+  attribute:
+    width: 20
+    height: 50
+  children:
+    tex:
+      type: texture
+      attribute:
+        width: 500
+        height: 50
+        normal: ~255,0,0
+        hover: ~255,255,0
+        texts: "'我是一个卡片消息' + self.parent.data['name']"
+        fontSize: 32
+      action:
+        click: |-
+          Message.chat('点我干嘛')

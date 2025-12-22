@@ -1,0 +1,36 @@
+
+#物品图标
+Icon:
+  custom_name: "&f左键攻击" #展示名称
+  material: "paper" #物品材质
+  model_id:
+
+SkillClassId: "Warrior_attack_Main"
+
+
+
+
+#技能默认元数据
+#元数据中的 <>将会解析成属性值
+#只有get整个元数据时才会解析 如果你从原始副本中拿则返回字符串
+Meta:
+  #伤害倍率
+  damage: "<攻击倍率>"
+  #冷却时间 单位是秒
+  cooldown: "<冷却时间>"
+
+#技能的属性值
+Attributes:
+  #属性key 这里可以随意定 不同于角色属性
+  攻击倍率:
+    #属性的基础值
+    base: 15.0
+    #每级增加的值
+    per-level: 5.0
+    #最大值
+    max: 50.0
+    #最小值
+    min: 10.0
+  冷却时间:
+    base: 0.6
+    per-level: 0

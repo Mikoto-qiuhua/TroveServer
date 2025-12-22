@@ -1,0 +1,27 @@
+bossbar:
+  match:
+    - "boss" # 这里填写匹配生物名，不需要填写颜色代码
+root_control: # 填写控件片段，注意，如果你的载体BossBars控件已经使用了自适应布局控件作为父级，这里不需要再套一层
+  type: canvas
+  attribute:
+    width: 1000
+    height: 60
+  children:
+    name:
+      type: text
+      attribute:
+        center: true
+        x: 500
+        y: 5
+        fontSize: 32
+        texts: self.parent.entityName  # 生物名会作为变量加入到该血条的根控件中
+    bar:
+      type: bossbar
+      attribute:
+        width: 1000
+        height: 20
+        y: 30
+        textures: # 这里填写每层的贴图 填多少个就会分为多少层
+          - ~255,0,0
+          - ~0,255,0
+          - ~0,0,255

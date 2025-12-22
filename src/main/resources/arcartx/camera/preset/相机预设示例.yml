@@ -1,0 +1,11 @@
+idle: # 配置项名作为ID 不要重复
+  offsetX: 0 # 相机X轴偏移
+  offsetY: 0.5 # 相机Y轴偏移
+  offsetZ: 3 # 相机Z轴偏移
+  enableFree: true # 是否启用自由视角
+  bezier: # 切换至该视角的贝塞尔曲线
+    x1: 0.1
+    y1: 0.25
+    x2: 0.1
+    y2: 0.25
+  transition: 1000 # 切换至该视角的时间 毫秒

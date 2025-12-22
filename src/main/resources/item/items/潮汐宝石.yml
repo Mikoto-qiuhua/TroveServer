@@ -1,0 +1,21 @@
+T1潮汐宝石:
+  custom_name: "§f潮汐宝石 +<Strengthen_Level>"
+  material: "stone"
+  model_id:
+  lore:
+    - "§fEXP <Strengthen_Exp>/<Strengthen_ExpMax>"
+    - ""
+    - "<attributes>"
+    - ""
+    - "§7潮汐宝石。一般出现于浸没冒险世界。"
+    - ""
+    - "§f"
+  max_stack_size: 1
+  hide_tooltip: false
+  cooldownGroup:
+  attributes: T1宝石
+  tag:
+    Gem: "潮汐宝石"
+    Strengthen_Level: 0
+    Strengthen_Exp: 0
+    Strengthen_ExpMax: 100

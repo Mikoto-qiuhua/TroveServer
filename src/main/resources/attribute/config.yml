@@ -1,0 +1,23 @@
+#当非玩家实体生成时自动添加的属性
+base_attribute_entity:
+
+#玩家自动添加的属性
+base_attribute_player:
+  - "最大生命值:10"
+  - "移动速度:1"
+
+#覆盖原版属性
+vanilla:
+  #原版的属性ID 只要id对就能改
+  #生命值不会在玩家身上生效
+  max_health:
+    #设置的值 可以是纯数字也能是计算公式
+    #必须使用属性key 才能正常返回属性数值
+    value: "生命值"
+    #是否关闭原版属性
+    #true=开启 false=关闭
+    vanilla: false
+
+  movement_speed:
+    value: "移动速度 / 10"
+    vanilla: false

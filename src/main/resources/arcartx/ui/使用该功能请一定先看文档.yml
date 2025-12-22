@@ -1,0 +1,17 @@
+ui:
+  match:
+  hide:
+  itemSize: "16"
+  through: "false"
+  escClose: "true"
+  background: "true"
+  closeDied: "true"
+  show: "true"
+  jei: "false"
+  level: "0"
+  action:
+  packetHandler:
+  isHud: "false"
+  defaultOpen: "true"
+controls:
+template:

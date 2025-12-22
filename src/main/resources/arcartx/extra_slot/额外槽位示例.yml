@@ -1,0 +1,14 @@
+Slot1: # 配置项名作为ID 不要重复
+  attribute: "none" # 槽位属性 当前支持：none(不启用槽位属性)、AttributePlus（启用AttributePlus属性支持 需要AttributePlus3.0+）
+  limit: # 槽位限制，请查看脚本如何使用以了解这里如何填写，无限制可以删除该配置项
+    - "检测玩家等级{level = 10}"
+  update: # 槽位物品更新后执行的脚本，请查看脚本如何使用以了解这里如何填写，无需执行脚本可以删除该配置项
+    - "给玩家发送消息{message = 你更新了你的槽位物品}"
+
+# 这里做一个放入物品后读取nbt然后根据nbt设置玩家模型来实现一个类似于时装的功能
+Slot2:
+  attribute: "none"
+  limit:
+    - "检测物品包含lore{lore = 模型}"
+  update:
+    - "通过NBT设置模型{key = model}"

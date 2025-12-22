@@ -1,0 +1,4 @@
+example:
+  matchName: "匹配生物名"
+  modelID: "模型id"
+  scale: 1

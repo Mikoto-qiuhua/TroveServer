@@ -1,0 +1,79 @@
+#属性名称
+智力:
+  #捕获的属性名称
+  names:
+    - '智力'
+    - '智力加成'
+  #属性映射 映射的属性key应当是其他属性key 而不是属性名称
+  #映射的计算公式有 value 当前属性的合计
+  mapping:
+    - "魔法伤害:{value * 0.5}"
+    - "暴击伤害:{value * 1}%"
+    - "暴击几率:{value * 0.1}%"
+  #Default 先加算 在乘算百分比  Percent仅加算百分比
+  read_pattern: Default
+
+力量:
+  names:
+    - '力量'
+    - '力量加成'
+  mapping:
+    - "物理伤害:{value * 0.5}"
+    - "生命值:{value * 1}%"
+    - "暴击伤害:{value * 1}%"
+  read_pattern: Default
+
+物理伤害:
+  names:
+    - '物理伤害'
+    - '物理伤害加成'
+  read_pattern: Default
+
+魔法伤害:
+  names:
+    - '魔法伤害'
+
+生命值:
+  names:
+    - '最大生命值'
+    - '最大生命值加成'
+  min: 10
+
+#减少击退效果
+稳定性:
+  names:
+    - '稳定性'
+  read_pattern: Percent
+  max: 1
+  min: 0
+
+暴击伤害:
+  names:
+    - '暴击伤害'
+  read_pattern: Percent
+
+暴击几率:
+  names:
+    - '暴击几率'
+  read_pattern: Percent
+  max: 1
+
+移动速度:
+  names:
+    - "移动速度"
+  read_pattern: Percent
+  min: 0
+
+跳跃次数:
+  names:
+    - "跳跃次数"
+  read_pattern: Default
+  min: 0
+
+寻魔率:
+  names:
+    - "寻魔率"
+  read_pattern: Default
+  min: 0
+
+

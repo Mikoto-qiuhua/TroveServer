@@ -1,0 +1,258 @@
+# 转换组，下面transition对此有说明
+group:
+  base_main:
+    - death # 死
+    - sleep # 睡
+
+    # 乘骑系[注意同系动作条件需要互斥]
+    - ride_pig # 骑猪
+    - boat # 船
+    - ride # 不知道骑什么但是骑
+
+    # 游泳系[注意同系动作条件需要互斥]
+    - swim # 游泳
+    - swim_stand # 在水里
+
+    - fly # 飞
+    - fall_fly # 滑翔
+
+    # 阴暗系[注意同系动作条件需要互斥]
+    - climb_walk # 爬行
+    - climb # 爬
+
+    # 攀爬系[注意同系动作条件需要互斥]
+    - ladder_up # 上爬
+    - ladder_down # 下爬
+    - ladder_idle # 没动但是爬
+
+    - jump # 跳跃
+
+    # 移动系[注意同系动作条件需要互斥]
+    - run # 跑步
+    - sneak_walk # 蹲着走
+    - walk # 走
+    - sneak # 蹲
+
+    - idle # 站
+  base_secondary:
+    - right_eat
+    - left_eat
+    - right_swing
+    - left_swing
+    - empty
+# 控制器列表
+# 每个配置下可以有多个子控制器，比如我们可以有上半身的控制器和下半身的控制器，或者主控制器和副控制器。
+# 正常情况下，我们一般都会有一个主控制器和一个副控制器。比如主控制器在跑步、副控制器控制上半身的攻击等状态。
+controllers:
+  # 主控制器 控制基本行为
+  main:
+    # 默认状态
+    initial_state: idle
+    # 状态列表
+    states:
+      # 状态ID 随便命名
+      idle:
+        animation: idle # 动作名
+        speed: 1 # 播放速度
+        transitionTick: 5 # 动画过渡tick时长
+        condition: true # 进入该状态的条件，这里支持Shimmer脚本，由于这个动作是默认状态，所以条件设置为true【默认状态必须设置为true，否则会发生可怕的事情】
+        exclusive: false # 独占模式 该模式开启的状态，在这个动作播放完成之前不会转换为转换列表内的任何状态。
+        # 这个独占模式详细解释一下：如果当前动作循环类型是loop，会在每次播放完才进行一次条件检查，如果该状态条件依然成立则会继续该状态，如果为false则退出该状态并切换至默认状态同时检查默认状态可切换的状态
+        # 如果当前动作是play_once，则会在当前状态的动作执行完成后立刻退出当前状态，然后立刻切换到默认状态并检查默认状态可切换的状态。
+        # 这在一些情况下非常有用，至于为什么有用请自行挖掘。
+
+        # 以下四个【onStart|onBreak|onEnd|clientLock】仅在控制器作用于客户端当前玩家自身时候生效
+        onStart: Camera.setCameraPreset('idle') # 进入该状态执行的脚本，比如我们可以切换相机视角
+        onBreak: "" # 中断该状态执行的脚本
+        onEnd: "" # 结束该状态执行的脚本
+        # 客户端锁定选项
+        clientLock:
+          # 这个暂时没想好，先占个位置d
+          input: []
+          # 锁定的动作 当前支持SNEAK（下蹲） | JUMP（跳跃） | MOVE（移动）
+          # 将可锁定的内容加入到这里，会从客户端层面禁止玩家进行这些动作的输入
+          action: []
+        # 该状态可转换成哪些状态，填写状态id
+        # 如果涉及多个复用id，可以在上面设置组，在此直接填写group~组名 即可
+        transition:
+          - group~base_main
+      sneak:
+        animation: sneak
+        transitionTick: 5
+        condition: self.isSneaking() && !self.isWalking()
+        transition:
+          - group~base_main
+      walk:
+        animation: walk
+        transitionTick: 5
+        condition: self.isWalking() && !self.isSneaking()
+        transition:
+          - group~base_main
+      sneak_walk:
+        animation: sneak_walk
+        transitionTick: 5
+        condition: self.isSneaking() && self.isWalking()
+        transition:
+          - group~base_main
+      run:
+        animation: run
+        transitionTick: 5
+        condition: self.isRunning()
+        transition:
+          - group~base_main
+      jump:
+        animation: jump
+        transitionTick: 5
+        condition: self.isJumping()
+        transition:
+          - group~base_main
+      ladder_up:
+        animation: ladder_up
+        transitionTick: 5
+        condition: self.isLadderUp()
+        transition:
+          - group~base_main
+      ladder_down:
+        animation: ladder_down
+        transitionTick: 5
+        condition: self.isLadderDown()
+        transition:
+          - group~base_main
+      ladder_idle:
+        animation: ladder_idle
+        transitionTick: 5
+        condition: self.isLadderIdle()
+        transition:
+          - group~base_main
+      ladder_idle:
+        animation: ladder_idle
+        transitionTick: 5
+        condition: self.isLadderIdle()
+        transition:
+          - group~base_main
+      climb:
+        animation: climb
+        transitionTick: 5
+        condition: self.isCrawl() && !self.isWalking()
+        transition:
+          - group~base_main
+      climb_walk:
+        animation: climb_walk
+        transitionTick: 5
+        condition: self.isCrawl() && self.isWalking()
+        transition:
+          - group~base_main
+      fly:
+        animation: fly
+        transitionTick: 5
+        condition: self.isFlying()
+        transition:
+          - group~base_main
+      fall_fly:
+        animation: fall_fly
+        transitionTick: 5
+        condition: self.isFallFlying()
+        transition:
+          - group~base_main
+      swim:
+        animation: swim
+        transitionTick: 5
+        condition: self.isSwimming()
+        transition:
+          - group~base_main
+      swim_stand:
+        animation: swim_stand
+        transitionTick: 5
+        condition: self.isInWater() && !self.isSwimming()
+        transition:
+          - group~base_main
+      ride:
+        animation: ride
+        transitionTick: 5
+        condition: self.isRide() && !self.isRidePig() && !self.inBoat()
+        transition:
+          - group~base_main
+      ride_pig:
+        animation: ride_pig
+        transitionTick: 5
+        condition: self.isRidePig()
+        transition:
+          - group~base_main
+      boat:
+        animation: boat
+        transitionTick: 5
+        condition: self.inBoat()
+        transition:
+          - group~base_main
+      sleep:
+        animation: sleep
+        transitionTick: 5
+        condition: self.isSleeping()
+        transition:
+          - group~base_main
+      death:
+        animation: death
+        transitionTick: 5
+        condition: |-
+          self.isDeath()
+        transition:
+          - group~base_main
+
+  # 副控制器
+  # 这里顺便说一下控制器顺序相关的内容，越靠后的控制器，会覆盖前面控制器的设置的骨骼的动作。比如前面的控制器的动作设置手部旋转90度，下面的控制器的动作设置手部旋转180度，那么最终实际角度是180度
+  # 这种覆盖仅存在于两个动作同时操作一个骨骼
+  secondary:
+    # 默认状态
+    initial_state: empty
+    # 状态列表
+    states:
+      empty:
+        animation: empty # 注意，这里需要真的存在这个动作，但是动作实际不带有任何内容。
+        transitionTick: 1
+        condition: true
+        transition:
+          - group~base_secondary
+      right_eat:
+        animation: eat_mainhand
+        transitionTick: 5
+        condition: self.isRightEating()
+        transition:
+          - group~base_secondary
+      left_eat:
+        animation: eat_offhand
+        transitionTick: 5
+        condition: self.isLeftEating()
+        transition:
+          - group~base_secondary
+      right_swing:
+        animation: swing_hand
+        transitionTick: 5
+        condition: self.isRightSwing()
+        exclusive: true # 这里我们设置独占模式，这样可以保证这个动作至少播放一次
+        transition:
+          - group~base_secondary
+      left_swing:
+        animation: swing_offhand
+        transitionTick: 5
+        condition: self.isLeftSwing()
+        exclusive: true # 这里我们设置独占模式，这样可以保证这个动作至少播放一次
+        transition:
+          - group~base_secondary
+
+      # 然后我们写一下连招的动作，【不过这些需要使用其它插件来完成连招的播放】
+      attack1:
+        animation: 挥剑1
+        transitionTick: 5
+        condition: true # 外部触发的状态，这里填写true 下面的独占模式也是true，代表触发后播放一次
+        exclusive: true
+        transition: [] # 这里不需要填任何内容，因为独占模式下，动作为play_once时，结束会直接切换到默认分支。
+      attack2:
+        animation: 挥剑2
+        transitionTick: 5
+        condition: true
+        exclusive: true
+      attack3:
+        animation: 挥剑3
+        transitionTick: 5
+        condition: true
+        exclusive: true

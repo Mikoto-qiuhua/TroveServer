@@ -1,0 +1,20 @@
+# 样式ID
+test:
+  # 每张贴图的宽高
+  textureWidth: 32
+  textureHeight: 32
+  # 位置随机值（世界坐标单位）
+  randomMin: 0
+  randomMax: 1
+  # 贴图列表，从0到9一共9张图
+  textures:
+    - "damage/0.png"
+    - "damage/1.png"
+    - "damage/2.png"
+    - "damage/3.png"
+    - "damage/4.png"
+    - "damage/5.png"
+    - "damage/6.png"
+    - "damage/7.png"
+    - "damage/8.png"
+    - "damage/9.png"

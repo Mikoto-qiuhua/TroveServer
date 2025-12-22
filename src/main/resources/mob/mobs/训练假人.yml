@@ -1,0 +1,52 @@
+
+#实体显示的名称
+DisplayName: "训练假人"
+#是否显示血条纹理
+DisplayHealth: false
+#所使用的实体对象
+MobClassId: "DamageDummyEntity"
+
+#参数
+Settings:
+  #默认配置
+  default:
+    #自定义标签
+    tag:
+    #实体的属性列表 遵循属性的配置格式
+    attributes:
+      - "最大生命值:10"
+    #掉落在地面的物品
+    drop:
+      #js条件
+      #player 需要发放的玩家
+      condition:
+      #共享的范围 不填或者是0则不共享 注意掉落物共享是每个玩家都有自己的掉落物
+      sharingScope: 32
+      list:
+        - type: "ITEM"  #类型    全部类型都有一个key  他会尝试从物品库中查找这个key的物品作为掉落物展示
+          key: "测试物品" #物品
+          amount: 1 #数量
+          weight: 1.0 #权重
+          condition: #js条件
+        - type: "EXP"
+          key: "怪物"
+          amount: 100
+          weight: 1.0
+        - type: "CURRENCY"
+          key: "默认货币"
+          amount: 100
+          weight: 1.0
+        - type: "JS"
+          action: |-
+
+
+          weight: 1.0
+    #虚拟数据 例如钱 经济 或直接发放到玩家身上的物品  虚拟数据共享为附近的玩家均可以享受
+    reward:
+
+
+
+
+
+
+

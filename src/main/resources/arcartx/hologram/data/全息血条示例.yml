@@ -1,0 +1,21 @@
+# 全息数据
+width: 350
+height: 35
+action:
+  open: |-
+    var.alpha = Lerp(0,1,1000)
+element:
+  bar:
+    type: "texture"
+    attribute:
+      y: "25"
+      width: "350 * val.health / val.maxHealth"
+      height: "10"
+      alpha: "var.alpha"
+      path: "health_bar/bar.png"
+  name:
+    type: "text"
+    attribute:
+      alpha: "var.alpha"
+      texts: "val.name"
+      fontSize: 30

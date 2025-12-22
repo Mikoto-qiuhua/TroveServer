@@ -1,0 +1,38 @@
+Flag:
+  #区块视野距离
+  chunk-view-distance: 8
+  #调度器线程数
+  dispatcher-threads: 1
+  #实体视野距离
+  entity-view-distance: 5
+
+
+Server:
+  #服务器名称
+  serverName: "TroveServer"
+  #是否启用正版验证
+  onlineMode: false
+  #数据包压缩阈值
+  compressionThreshold: 256
+  #ip
+  ip: "0.0.0.0"
+  #端口号
+  port: 25565
+  #TRACE, DEBUG, INFO, WARN, ERROR
+  logLevel: "DEBUG"
+  adminList:
+    - "Mikoto_qiuhua"
+
+
+
+World:
+  #默认出生的世界
+  default: "主城"
+  #出生的坐标和朝向 x,y,z,yaw,pitch
+  respawnPoint: 0,10,0,0,0
+  #自动加载的世界列表
+  autoLoad:
+    #key是世界名称 value是加载worlds文件夹内的世界文件夹名称
+    主城:
+      #世界文件夹的路径 无需worlds
+      path:

@@ -1,0 +1,53 @@
+
+#替换的属性list格式
+AttributeFormat:
+  format: "&f<key> <value>"
+  #属性的标识
+  keyIcon:
+  #强化的标识
+  strengthenIcon: "+"
+
+#属性的模版
+AttributeRandomTemplate:
+  #模版名称
+  T1宝石:
+    #最少数量
+    min: 1
+    #最多数量
+    max: 2
+    #是否可以重复
+    repeat: false
+    #属性
+    attribute:
+      - name: "物理伤害:<value>"
+        min: 5
+        max: 10
+        weight: 10
+      - name: "物理伤害加成:<value>%"
+        min: 10
+        max: 20
+        weight: 5
+      - name: "魔法伤害:<value>"
+        min: 5
+        max: 10
+        weight: 10
+      - name: "魔法伤害加成:<value>%"
+        min: 10
+        max: 20
+        weight: 5
+      - name: "最大生命值:<value>"
+        min: 30
+        max: 60
+        weight: 5
+      - name: "最大生命值加成:<value>%"
+        min: 5
+        max: 10
+        weight: 5
+      - name: "暴击伤害:<value>%"
+        min: 5
+        max: 10
+        weight: 5
+      - name: "暴击几率:<value>%"
+        min: 2
+        max: 5
+        weight: 5

@@ -1,0 +1,36 @@
+T1烈焰宝石:
+  #展示的名称 <>会解析tag标签内对应内容
+  #当第一次生成时 会从tag中拿内容  更新物品时从物品原本的nbt上拿
+  #更新物品时是不会更新tag的
+  #<attributes>的内容不会解析
+  custom_name: "§f烈焰宝石 +<Strengthen_Level>"
+  #物品使用的原版材质
+  material: "stone"
+  #使用的模型文件 命名空间:ID item:blank
+  model_id:
+  #显示的lore <>会解析tag标签内对应内容
+  #<attributes>为属性
+  lore:
+    - "§fEXP <Strengthen_Exp>/<Strengthen_ExpMax>"
+    - ""
+    - "<attributes>"
+    - ""
+    - "§7烈焰宝石。一般出现于熔岩冒险世界。"
+    - ""
+    - "§f"
+  #堆叠数量
+  max_stack_size: 1
+  #是否隐藏tip
+  hide_tooltip: false
+  #物品的冷却组
+  cooldownGroup:
+  #可为列表或单字符串
+  #为列表时直接设置属性
+  #为字符串时检查随机属性模版
+  attributes: T1宝石
+  #自定义标签
+  tag:
+    Gem: "烈焰宝石"
+    Strengthen_Level: 0
+    Strengthen_Exp: 0
+    Strengthen_ExpMax: 100

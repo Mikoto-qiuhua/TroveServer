@@ -1,0 +1,166 @@
+####################################################
+
+# 请一定看完所有文字后再进行修改！！！！！！
+# 请一定看完所有文字后再进行修改！！！！！！
+# 请一定看完所有文字后再进行修改！！！！！！
+
+####################################################
+
+# 脚本目前分为两种类型，一种是普通脚本，一种是事件脚本
+# 普通脚本是用于比如按键按下时候的执行脚本、额外槽位放置时候的条件检测脚本、额外槽位物品更新时候的执行脚本等等
+# 事件脚本是用于在某些事件发起的时候执行脚本，比如玩家进入游戏时候的执行脚本、玩家移动的时候执行脚本等
+
+# 一些可能的使用效果：
+# 1. 按键按下时候给玩家发送消息 / 按键时候通过检测某些条件给玩家变身（如短暂设置模型）
+# 2. 额外槽位放置时候检测玩家是否有条件将物品放入槽位，如果条件检测不通过则返回false
+# 3. 额外槽位物品更新时候给玩家发送消息 / 额外槽位物品更新时候通过检测某些条件给玩家变身（如短暂设置模型）
+# 4. 玩家进入游戏时（事件脚本）给玩家发送消息、通过外部API比如职业插件给玩家设置职业对应的模型等
+# ....以此类推，请发挥想象
+
+# 普通脚本（normal）可用常量：
+# player -> 玩家自身
+# itemStack -> （在操作槽位时有效）槽位物品
+# args -> 调用时候传入的参数
+
+# 事件脚本（event）可用常量：
+# event -> 事件对象
+
+# 如果你不会请学习js基础或者找你会js的朋友帮助你完成
+# 导入类需要手动导入，前往setting.yml的script_imports进行导入你所需要的类（同样这一步你至少要会js基础）
+
+# 关于配置(yml)中允许调用脚本的配置项，可以给脚本传入参数：
+# 参数的格式为：参数名 = 参数值，多个参数用分号隔开。例如: {message = 你好;message2 = 你好2}
+
+# 一些建议：
+# 1. 请不要在脚本中使用过多的循环，会导致服务器卡顿
+# 2. 请不要在脚本中使用过多的递归，会导致服务器卡顿
+# 3. 如果您确实会js，应该可以自行甄别哪些操作会导致服务器卡顿，避免使用这些操作
+# 4. 关于事件脚本，请不要太过于相信客户端相关的事件，因为客户端是不可信的，以下是一个不安全的实践:
+
+#  在客户端发包事件时让玩家以OP身份执行指令: # 注意 这是一个错误示范！！！
+#      type: "event"
+#      target: "priv.seventeen.artist.arcartx.event.client.ClientCustomPacketEvent"
+#      script: |
+#          PlayerUtils.static.dispatchOpCommand(player,event.getArg(0));
+# 这个脚本会发生什么？当客户端发包时，会以OP身份执行客户端发包中的指令，这是一个非常不安全的操作，请不要这样做。
+
+# 一些实用的例子
+
+###############################################
+# >>> 以下这些可能用于比如按键等可以主动触发脚本的场景
+###############################################
+
+# 示例0. 给玩家发送Title，配置中调用方式：给玩家发送Title{title = 你好;subtitle = 你好2}
+给玩家发送Title:
+  type: "normal"
+  script: |
+    player.sendTitle(args.getString("title"),args.getString("subtitle"));
+
+# 示例1. 给玩家发送消息，配置中调用方式：给玩家发送消息{message = 你好}
+给玩家发送消息:
+  type: "normal"
+  script: |
+    player.sendMessage(args.getString("message"));
+
+# 示例2. 让玩家发送一条聊天消息，配置中调用方式：让玩家发送消息{message = 你好}
+让玩家发送消息:
+  type: "normal"
+  script: |
+    player.chat(args.getString("message"));
+
+# 示例3. 玩家以OP身份执行一个命令，配置中调用方式：玩家OP执行命令{command = help}
+# PS: 这里使用的是基于TabooLib的虚拟OP工具，如果需要玩家执行OP命令请一定使用这个方法，不要使用setOp把玩家真的设置成OP再取消
+# 这个示例和上面错误示范的区别在于，这个示例执行的指令来自于服务端，而不是客户端
+玩家OP执行命令:
+  type: "normal"
+  script: |
+    PlayerUtils.static.dispatchOpCommand(player,args.getString("command").replace("<player>",player.getName()));
+
+# 示例4. 通过ArcartXAPI让玩家客户端执行Shimmer脚本，配置中调用方式：执行脚本{script = Shimmer.println("Hello World!")}
+执行脚本:
+  type: "normal"
+  script: |
+    ArcartXAPI.static.getEntityManager().getPlayer(player).parseShimmer(args.getString("script"));
+
+# 示例5. 以控制台身份执行命令，配置中调用方式：控制台执行命令{command = say 你好! <player>}
+控制台执行命令:
+  type: "normal"
+  script: |
+    Bukkit.static.dispatchCommand(Bukkit.static.getConsoleSender(),args.getString("command").replace("<player>",player.getName()));
+
+# 示例6. 通过ArcartXAPI设置玩家模型持续xx毫秒 配置中调用方式：设置玩家模型{model = "model",scale = 1.0,time = 1000}
+设置玩家模型:
+  type: "normal"
+  script: |
+    ArcartXAPI.static.getEntityManager().getPlayer(player).tryModel(args.getString("model"),args.getDouble("scale"),args.getInt("time"));
+
+###############################################
+# >>> 以下这些可能用于额外槽位放置时候的条件检测脚本
+###############################################
+
+# 示例7. 检测玩家是否有权限放置物品到额外槽位，配置中调用方式：检测玩家权限{permission = "example.permission"}
+检测玩家权限:
+  type: "normal"
+  script: |
+    var result = player.hasPermission(args.getString("permission"));
+    if (!result) {
+        player.sendMessage("你没有权限放置这个物品");
+    }
+    return result
+
+# 示例8. 检测玩家等级是否达到要求，配置中调用方式：检测玩家等级{level = 10}
+检测玩家等级:
+  type: "normal"
+  script: |
+    var result = player.getLevel() >= args.getInt("level");
+    if (!result) {
+        player.sendMessage("你的等级不足");
+    }
+    return result
+
+# 示例9. 检测物品是否包含指定lore，配置中调用方式：检测物品包含lore{lore = "lore"}
+检测物品包含lore:
+  type: "normal"
+  script: |
+    var result = ItemStackUtils.static.containsLore(itemStack,args.getString("lore").replace("&","§"));
+    if (!result) {
+        player.sendMessage("物品不符合要求");
+    }
+    return result
+
+# 示例10. 检测物品是否有一行lore是指定内容，配置中调用方式：检测物品lore{lore = "lore"}
+检测物品lore:
+  type: "normal"
+  script: |
+    var result = ItemStackUtils.static.hasLore(itemStack,args.getString("lore").replace("&","§"));
+    if (!result) {
+        player.sendMessage("物品不符合要求");
+    }
+    return result
+
+###############################################
+# >>> 以下这些可能用于额外槽位物品更新时候的执行脚本
+###############################################
+
+# 示例11. 检测物品的nbt值，如果包含改nbt则将玩家的模型设置位指定模型，配置中调用方式：通过NBT设置模型{key = "xxx.xxx"}
+通过NBT设置模型:
+  type: "normal"
+  script: |
+    var nbt = ItemStackUtils.static.getTag(itemStack,args.getString("key"))
+    if(nbt.isEmpty()) {
+        return;
+    }
+    ArcartXAPI.static.getEntityManager().getPlayer(player).setModel(nbt,1.0);
+
+
+###############################################
+# >>> 以下这些是事件脚本，用于在某些事件发起的时候执行脚本
+# PS: 事件不需要导入包，填写完整的类路径+类名即可
+###############################################
+
+# 示例12. 玩家进入游戏时给玩家发送消息，配置中调用方式：玩家进入游戏发送消息
+玩家进入游戏发送消息:
+  type: "event"
+  target: "priv.seventeen.artist.arcartx.event.client.ClientInitializedEvent$End"
+  script: |
+    event.getPlayer().sendMessage("你好！" + event.getPlayer().getName() + "我是ArcartX事件脚本发送的消息");
