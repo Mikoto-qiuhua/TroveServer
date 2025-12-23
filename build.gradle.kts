@@ -27,6 +27,7 @@ dependencies {
     compileOnly ("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     implementation("net.minestom:minestom:2025.09.13-1.21.8")
+    //implementation("net.minestom:minestom:2025.07.03-1.21.5")
     implementation("org.yaml:snakeyaml:2.2")
     implementation("de.articdive:jnoise-pipeline:4.1.0")
     implementation("com.dfsek.terra:minestom:6.6.5-BETA+1ef12fdec")

@@ -58,7 +58,7 @@ public class UI implements ArcartXUI {
                 ConfigurationSection templateSection = templatesSection.getConfigurationSection(templateKey);
                 if(templateSection != null){
                     Control control = Control.parseControl(templateSection);
-                    controls.put(templateKey, control);
+                    template.put(templateKey, control);
                 }
 
             }

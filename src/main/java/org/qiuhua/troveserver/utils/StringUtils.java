@@ -2,6 +2,8 @@ package org.qiuhua.troveserver.utils;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.util.RGBLike;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -39,10 +41,6 @@ public class StringUtils {
         return Component.text(string);
     }
 
-    public static Component stringToComponentPixel(String string){
-        return Component.text(string).font(Key.key("uifont", "pixel0"));
-    }
-
 
     public static List<Component> stringToComponent(List<String> list){
         return list.stream()
@@ -50,11 +48,6 @@ public class StringUtils {
                 .collect(Collectors.toList());
     }
 
-    public static List<Component> stringToComponentPixel(List<String> list){
-        return list.stream()
-                .map(StringUtils::stringToComponentPixel)
-                .collect(Collectors.toList());
-    }
 
 
 

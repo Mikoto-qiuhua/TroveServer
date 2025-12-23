@@ -1,9 +1,15 @@
 package org.qiuhua.troveserver.module.role.ui;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
+import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.entity.Player;
+import net.minestom.server.item.ItemStack;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.config.IConfig;
 import org.qiuhua.troveserver.arcartx.core.config.ui.type.UI;
@@ -182,6 +188,7 @@ public class RoleMainUi implements IConfig {
      *          skills 技能列表 Map
      *              skillName 技能名称
      *              packet 技能自定义数据包
+     *          equipSlotMap 装备槽位 Map  key是槽位id  value是对应的物品json
      *
      *
      * @param rpgPlayer
@@ -219,11 +226,15 @@ public class RoleMainUi implements IConfig {
             skills.add(map);
         });
         roleDataPacket.put("skills", skills);
+        Map<String, Object> equipSlotMap = new HashMap<>();
+        roleData.getEquipSlotMap().forEach((slotId, equipSlotData) -> {
+            String itemJson = ItemStack.CODEC.encode(Transcoder.JSON, equipSlotData.getItemStack()).orElseThrow().toString();
+            equipSlotMap.put(slotId, itemJson);
+            Main.getLogger().debug(itemJson);
+        });
+        roleDataPacket.put("equipSlotMap", equipSlotMap);
         arcartXUI.sendPacket(rpgPlayer, "RoleDataPacket", roleDataPacket);
     }
-
-
-
 
 
 

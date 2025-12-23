@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import org.jetbrains.annotations.NotNull;
@@ -136,6 +137,29 @@ public class NetworkMessageSender {
     public static void sendCustomPacket(Player player, String key, String ... value) {
         sendPacketSync(player, MessageID.Server.CUSTOM, DecodeType.NORMAL, new SPackCustomPacket(key, Arrays.asList(Arrays.copyOf(value, value.length))));
     }
+
+    /**
+     * 给一个槽位发送物品
+     * @param player
+     * @param id
+     * @param itemStack
+     */
+    public static void sendSlotItemStack(Player player, String id, ItemStack itemStack) {
+        sendPacketSync(player, MessageID.Server.SLOT_ITEM_STACK, DecodeType.NORMAL, new SPackSlotItemStack(id, itemStack));
+    }
+
+    /**
+     * 移除一个虚拟槽位物品
+     * @param player
+     * @param id
+     * @param isFirstWith 是否自动给末尾添加数字 例如 Slot_  = Slot_1 Slot_2 这样的槽位都移除物品
+     */
+    public static void sendSlotItemRemove(Player player, String id, boolean isFirstWith) {
+
+        sendPacketSync(player, MessageID.Server.SLOT_ITEM_STACK, DecodeType.NORMAL, new SPackSlotItemStack(id, isFirstWith, true));
+    }
+
+
 
 
     /**

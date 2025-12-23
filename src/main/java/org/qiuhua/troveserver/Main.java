@@ -2,7 +2,7 @@ package org.qiuhua.troveserver;
 
 
 import lombok.Getter;
-import net.minestom.server.Auth;
+
 import net.minestom.server.MinecraftServer;
 import org.qiuhua.troveserver.arcartx.ArcartX;
 import org.qiuhua.troveserver.command.ServerCommand;
@@ -49,7 +49,7 @@ public class Main {
         logger.info("╚══════════════════════════════════╝");
         MinecraftServer server;
         if(ServerConfig.server_onlineMode){
-            server = MinecraftServer.init(new Auth.Online());
+            server = MinecraftServer.init();
             Main.getLogger().warn("正版验证启用中");
         }else {
             server = MinecraftServer.init();

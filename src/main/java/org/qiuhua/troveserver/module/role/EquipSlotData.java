@@ -46,8 +46,6 @@ public class EquipSlotData {
         if(defaultItemId != null){
             this.itemStack = ItemManager.giveItem(defaultItemId);
         }
-        ItemStack.Builder builder = ItemStack.builder(Material.BARRIER);
-        ItemManager.setItemModel(builder, "item:blank");
     }
 
 
