@@ -1,14 +1,12 @@
 package org.qiuhua.troveserver.module.mob;
 
 import lombok.Getter;
-import org.qiuhua.troveserver.loot.loots.ItemLoot;
 import org.qiuhua.troveserver.loot.LootTable;
 import org.qiuhua.troveserver.module.attribute.AttributeCompileGroup;
 import org.qiuhua.troveserver.module.attribute.AttributeManager;
 import org.qiuhua.troveserver.utils.yaml.ConfigurationSection;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MobSettingsData {
@@ -61,18 +59,7 @@ public class MobSettingsData {
         if(rewardSection != null){
             rewardLootTable = new LootTable(rewardSection);
         }
-
-
-
-
     }
-
-
-
-
-
-
-
 
 
 

@@ -14,8 +14,6 @@ import java.io.File;
 
 public class AttributeInfoConfig implements IConfig {
 
-    public static YamlConfiguration config;
-
     @Override
     public void reload() {
         load();
@@ -35,7 +33,7 @@ public class AttributeInfoConfig implements IConfig {
         if (!(new File(FileUtils.getDataFolder() , "attribute/attributes.yml").exists())){
             FileUtils.saveResource("attribute/attributes.yml", false);
         }
-        config = FileUtils.loadFile("attribute/attributes.yml");
+        YamlConfiguration config = FileUtils.loadFile("attribute/attributes.yml");
         int i = 0;
         for (String key : config.getKeys(false)){
             AttributeDataConfig attributeDataConfig = new AttributeDataConfig(config.getConfigurationSection(key), key);

@@ -3,6 +3,7 @@ package org.qiuhua.troveserver;
 
 import lombok.Getter;
 
+import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import org.qiuhua.troveserver.arcartx.ArcartX;
 import org.qiuhua.troveserver.command.ServerCommand;
@@ -10,7 +11,6 @@ import org.qiuhua.troveserver.config.ConfigManager;
 import org.qiuhua.troveserver.config.ServerConfig;
 import org.qiuhua.troveserver.module.mob.MobManager;
 import org.qiuhua.troveserver.player.RPGPlayerProvider;
-import org.qiuhua.troveserver.module.models.ModelsManager;
 import org.qiuhua.troveserver.listener.GlobalListener;
 import org.qiuhua.troveserver.module.attribute.AttributeManager;
 import org.qiuhua.troveserver.module.item.ItemManager;
@@ -49,7 +49,7 @@ public class Main {
         logger.info("╚══════════════════════════════════╝");
         MinecraftServer server;
         if(ServerConfig.server_onlineMode){
-            server = MinecraftServer.init();
+            server = MinecraftServer.init(new Auth.Online());
             Main.getLogger().warn("正版验证启用中");
         }else {
             server = MinecraftServer.init();
@@ -66,7 +66,6 @@ public class Main {
         LoginManager.init();
         PlayerModeManager.init();
         RoleManager.init();
-        ModelsManager.init();
         MobManager.init();
         ArcartX.init();
         new GlobalListener(); //创建基础的监听器

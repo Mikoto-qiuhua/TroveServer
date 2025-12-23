@@ -3,7 +3,6 @@ package org.qiuhua.troveserver.module.role;
 
 import lombok.Getter;
 import org.qiuhua.troveserver.api.meta.IMeta;
-import org.qiuhua.troveserver.skill.SkillConfigData;
 import org.qiuhua.troveserver.utils.yaml.ConfigurationSection;
 
 import java.util.HashMap;
@@ -35,14 +34,14 @@ public class RoleSkillData implements IMeta {
     private final String skillName;
 
     @Getter
-    private final SkillConfigData skillConfigData;
+    private final RoleSkillConfigData roleSkillConfigData;
 
     public RoleSkillData(String skillName, ConfigurationSection config){
         this.skillName = skillName;
         trigger = config.getString("trigger");
-        skillConfigData = RoleManager.skillMechanicMap.get(skillName);
-        if(skillConfigData != null){
-            meta.putAll(skillConfigData.getMeta());
+        roleSkillConfigData = RoleManager.skillMechanicMap.get(skillName);
+        if(roleSkillConfigData != null){
+            meta.putAll(roleSkillConfigData.getMeta());
         }
         ConfigurationSection metaSection = config.getConfigurationSection("meta");
         if(metaSection != null){
@@ -63,10 +62,10 @@ public class RoleSkillData implements IMeta {
         for (Map.Entry<String, Object> entry : meta.entrySet()) {
             Object value = entry.getValue();
 
-            if (value instanceof String stringValue && skillConfigData != null) {
+            if (value instanceof String stringValue && roleSkillConfigData != null) {
                 // 使用正则表达式提取 <> 中的内容
                 String extracted = extractContentFromAngleBrackets(stringValue);
-                AttributesData attributesData = skillConfigData.getAttributesDataMap().get(extracted);
+                AttributesData attributesData = roleSkillConfigData.getAttributesDataMap().get(extracted);
                 if(attributesData != null){
                     value = attributesData.result(level);
                 }

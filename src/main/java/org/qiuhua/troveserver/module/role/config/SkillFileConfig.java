@@ -4,7 +4,7 @@ import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.config.IConfig;
 import org.qiuhua.troveserver.api.skill.AbstractSkillMechanic;
 import org.qiuhua.troveserver.module.role.RoleManager;
-import org.qiuhua.troveserver.skill.SkillConfigData;
+import org.qiuhua.troveserver.module.role.RoleSkillConfigData;
 import org.qiuhua.troveserver.utils.FileUtils;
 import org.qiuhua.troveserver.utils.yaml.file.YamlConfiguration;
 
@@ -51,8 +51,8 @@ public class SkillFileConfig implements IConfig {
             }else {
                 abstractSkillMechanic = supplier.get();
             }
-            SkillConfigData skillConfigData = new SkillConfigData(key, config, abstractSkillMechanic);
-            RoleManager.skillMechanicMap.put(key, skillConfigData);
+            RoleSkillConfigData roleSkillConfigData = new RoleSkillConfigData(key, config, abstractSkillMechanic);
+            RoleManager.skillMechanicMap.put(key, roleSkillConfigData);
         });
         Main.getLogger().info("加载技能 {} 个",  RoleManager.skillMechanicMap.size());
 

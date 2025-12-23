@@ -12,8 +12,6 @@ import java.util.List;
 
 public class RoleConfig implements IConfig {
 
-    public static YamlConfiguration config;
-
     public static ItemStack fillItem;
 
     public static Long clickInterval;
@@ -62,7 +60,7 @@ public class RoleConfig implements IConfig {
         if (!(new File(FileUtils.getDataFolder() , "role/config.yml").exists())){
             FileUtils.saveResource("role/config.yml", false);
         }
-        config = FileUtils.loadFile("role/config.yml");
+        YamlConfiguration config = FileUtils.loadFile("role/config.yml");
         fillItem = ItemManager.buildItem(config.getConfigurationSection("InventoryGui.fillItem"), "");
         clickInterval = config.getLong("InventoryGui.clickInterval");
         title0 = StringUtils.colorCodeConversion(config.getString("InventoryGui.title0"));

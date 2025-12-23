@@ -10,13 +10,13 @@ import net.minestom.server.entity.Player;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.command.AbstractCommand;
 import org.qiuhua.troveserver.api.command.SubCommand;
+import org.qiuhua.troveserver.api.config.IConfig;
 import org.qiuhua.troveserver.config.ConfigManager;
 import org.qiuhua.troveserver.player.RPGPlayer;
 
 import java.util.Map;
 
 public class ServerCommand extends AbstractCommand {
-
 
     private static final Map<String, String> cmdInfoMap = Map.of(
             "stop", "关闭服务器",
@@ -70,9 +70,7 @@ public class ServerCommand extends AbstractCommand {
                 }else {
                     Main.getLogger().info("执行指令 /{}", context.getInput());
                 }
-                ConfigManager.getAllConfig().values().forEach(config -> {
-                    config.reload();
-                });
+                ConfigManager.getAllConfig().values().forEach(IConfig::reload);
                 Main.getLogger().info("重载 {} 个配置完成", ConfigManager.getAllConfig().size());
             });
 

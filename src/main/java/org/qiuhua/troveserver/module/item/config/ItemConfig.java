@@ -17,9 +17,6 @@ public class ItemConfig implements IConfig {
     public static String attributeFormat_format;
     public static String attributeFormat_strengthenIcon;
 
-
-    public static YamlConfiguration config;
-
     @Override
     public void reload() {
         load();
@@ -30,7 +27,7 @@ public class ItemConfig implements IConfig {
         if (!(new File(FileUtils.getDataFolder() , "item/config.yml").exists())){
             FileUtils.saveResource("item/config.yml", false);
         }
-        config = FileUtils.loadFile("item/config.yml");
+        YamlConfiguration config = FileUtils.loadFile("item/config.yml");
         attributeFormat_format = StringUtils.colorCodeConversion(config.getString("AttributeFormat.format"));
         attributeFormat_strengthenIcon = config.getString("AttributeFormat.strengthenIcon", "+");
         ItemManager.allAttributeRandomTemplate.clear();

@@ -8,11 +8,10 @@ import net.kyori.adventure.title.TitlePart;
 import net.kyori.adventure.util.Ticks;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
-import net.minestom.server.entity.attribute.AttributeModifier;
-import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetCooldownPacket;
 import net.minestom.server.network.player.GameProfile;
@@ -24,13 +23,8 @@ import org.qiuhua.troveserver.api.buff.IBuff;
 import org.qiuhua.troveserver.api.buff.IBuffData;
 import org.qiuhua.troveserver.config.ServerConfig;
 import org.qiuhua.troveserver.module.role.RoleData;
-import org.qiuhua.troveserver.module.attribute.event.EntityAttributeAddEvent;
-import org.qiuhua.troveserver.module.attribute.event.EntityAttributeRemoveEvent;
-import org.qiuhua.troveserver.module.attribute.event.EntityAttributeUpdateEvent;
 import org.qiuhua.troveserver.module.playermode.event.PlayerModeSwitchEvent;
-import org.qiuhua.troveserver.module.attribute.AttributeCompileGroup;
 import org.qiuhua.troveserver.module.attribute.EntityAttributesData;
-import org.qiuhua.troveserver.module.attribute.config.AttributeConfig;
 import org.qiuhua.troveserver.module.playermode.PlayerMode;
 import org.qiuhua.troveserver.module.role.RoleUnlockedState;
 import org.qiuhua.troveserver.module.role.config.RoleConfig;
@@ -105,106 +99,11 @@ public class RPGPlayer extends Player implements IAttribute, IBuff {
 
 
     /**
-     * 添加一个属性源
-     * @param attributeCompileGroup
-     * @param source
-     */
-    public void addAttribute(AttributeCompileGroup attributeCompileGroup, String source){
-        EntityAttributeAddEvent entityAttributeAddEvent = new EntityAttributeAddEvent(this, attributeCompileGroup, source);
-        MinecraftServer.getGlobalEventHandler().call(entityAttributeAddEvent);
-        if(entityAttributeAddEvent.isCancelled()) return;
-        entityAttributesData.addAttribute(entityAttributeAddEvent.getAttributeCompileGroup(), entityAttributeAddEvent.getSource());
-    }
-
-    /**
-     * 移除一个属性
-     * @param source
-     */
-    public void removeAttribute(String source){
-        EntityAttributeRemoveEvent entityAttributeRemoveEvent = new EntityAttributeRemoveEvent(this, source);
-        MinecraftServer.getGlobalEventHandler().call(entityAttributeRemoveEvent);
-        if(entityAttributeRemoveEvent.isCancelled()) return;
-        entityAttributesData.removeAttribute(entityAttributeRemoveEvent.getSource());
-    }
-
-    /**
-     * 获取指定属性的实际结果
-     * @param attributeKey
      * @return
      */
-    public Double getAttributeTotal(String attributeKey){
-        return entityAttributesData.getAttributeTotal(attributeKey);
-    }
-
-    /**
-     * 获取指定属性的实际加算合计
-     * @param attributeKey
-     * @return
-     */
-    public Double getAttributeAmount(String attributeKey){
-        return entityAttributesData.getAttributeAmount(attributeKey);
-    }
-
-    /**
-     * 获取指定属性的实际乘算合计
-     * @param attributeKey
-     * @return
-     */
-    public Double getAttributePercent(String attributeKey){
-        return entityAttributesData.getAttributePercent(attributeKey);
-    }
-
-    /**
-     * 获取这个属性的最大值 如果是null则代表没有
-     * @param attributeKey
-     * @return
-     */
-    @Nullable
-    public Double getAttributeMax(String attributeKey){
-        return entityAttributesData.getAttributeMax(attributeKey);
-    }
-
-    /**
-     * 获取这个属性的最小值 如果是null则代表没有
-     * @param attributeKey
-     * @return
-     */
-    @Nullable
-    public Double getAttributeMin(String attributeKey){
-        return entityAttributesData.getAttributeMin(attributeKey);
-    }
-
-
-    /**
-     * 更新实体身上的属性
-     */
-    public void updateAttribute(){
-        EntityAttributeUpdateEvent entityAttributeUpdateEvent = new EntityAttributeUpdateEvent(this, entityAttributesData);
-        MinecraftServer.getGlobalEventHandler().call(entityAttributeUpdateEvent);
-        if(entityAttributeUpdateEvent.isCancelled()) return;
-        entityAttributeUpdateEvent.getEntityAttributesData().update();
-        updateVanilla();
-    }
-
-    /**
-     * 处理玩家的原版属性更新
-     */
-    public void updateVanilla(){
-        Map<String, Double> map = new HashMap<>(entityAttributesData.getAttributeMap());
-        AttributeConfig.vanillaAttributeConfigMap.forEach((key, value) -> {
-            Attribute attribute = Attribute.fromKey(key);
-            if(attribute != null){
-                AttributeInstance attributeInstance = getAttribute(attribute);
-                attributeInstance.clearModifiers();
-                Double result = value.total(map);
-                AttributeModifier attributeModifier = new AttributeModifier("custom:" + key, result, AttributeOperation.ADD_VALUE);
-                attributeInstance.addModifier(attributeModifier);
-                if(!value.getVanilla()){
-                    attributeInstance.setBaseValue(0);
-                }
-                Main.getLogger().debug("玩家 {} 的原版属性 {} 修改为 {}", getUsername(), key, attributeModifier);
-            }
-        });
+    @Override
+    public LivingEntity getEntity() {
+        return this;
     }
 
     /**

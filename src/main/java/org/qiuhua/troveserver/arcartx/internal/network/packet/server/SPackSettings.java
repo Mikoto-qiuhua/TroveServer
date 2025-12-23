@@ -1,8 +1,10 @@
 package org.qiuhua.troveserver.arcartx.internal.network.packet.server;
 
 import com.google.gson.annotations.SerializedName;
-import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.arcartx.core.config.Setting;
+import org.qiuhua.troveserver.arcartx.core.config.key.client.ClientKeyFolder;
+import org.qiuhua.troveserver.arcartx.core.config.key.group.KeyGroupFolder;
+import org.qiuhua.troveserver.arcartx.core.config.key.simple.SimpleKeyFolder;
 import org.qiuhua.troveserver.arcartx.core.config.ui.folder.TipFolder;
 import org.qiuhua.troveserver.arcartx.core.config.ui.type.Tip;
 import org.qiuhua.troveserver.arcartx.core.config.ui.type.UI;
@@ -30,24 +32,21 @@ public class SPackSettings implements ServerPacketBase{
 
     /**
      * 客户端按键
-     * 未实现
      */
     @SerializedName(value="clientKeyElements")
-    private final Map<String, Object> clientKeyElements = new HashMap<>();
+    private final Map<String, Object> clientKeyElements = new HashMap<>(ClientKeyFolder.clientKey);
 
     /**
      * 按键组
-     * 未实现
      */
     @SerializedName(value="keyGroupElements")
-    private final Map<String, Object> keyGroupElements = new HashMap<>();
+    private final Map<String, Object> keyGroupElements = new HashMap<>(KeyGroupFolder.keyGroups);
 
     /**
      * 简单按键
-     * 未实现
      */
     @SerializedName(value="simpleKeyElements")
-    private final Map<String, Object> simpleKeyElements = new HashMap<>();
+    private final Map<String, Object> simpleKeyElements = new HashMap<>(SimpleKeyFolder.simpleKey);
 
     /**
      * UI配置
@@ -59,7 +58,7 @@ public class SPackSettings implements ServerPacketBase{
      * Tip配置
      */
     @SerializedName(value="tip")
-    private final Collection<Tip> tipData = TipFolder.configs.values();
+    private final Collection<Tip> tipData = TipFolder.tips.values();
 
     /**
      * 聊天卡片

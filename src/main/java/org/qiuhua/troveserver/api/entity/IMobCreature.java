@@ -9,4 +9,5 @@ public interface IMobCreature {
     void spawnEntity(MobConfig mobConfig, String settingsId, Instance instance, Pos pos);
 
 
+
 }

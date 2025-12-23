@@ -16,7 +16,7 @@ public class TipFolder implements IConfig {
     /**
      * 全部的tip配置
      */
-    public static final Map<String, Tip> configs = new HashMap<>();
+    public static final Map<String, Tip> tips = new HashMap<>();
 
     /**
      *
@@ -31,20 +31,20 @@ public class TipFolder implements IConfig {
      */
     @Override
     public void load() {
-        configs.clear();
+        tips.clear();
         if (!(new File(FileUtils.getDataFolder() , "arcartx/tooltip").exists())){
             FileUtils.saveResource("arcartx/tooltip/示例.yml", false);
         }
         Map<String, YamlConfiguration> map = FileUtils.loadFiles(new File(FileUtils.getDataFolder(), "arcartx/tooltip"));
         map.forEach((key, config) -> {
-            if(configs.containsKey(key)){
+            if(tips.containsKey(key)){
                 Main.getLogger().warn("出现重名Tip配置 {} 请注意修改,本次将越过该配置读取", key);
                 return;
             }
             Tip tip = new Tip(key, config);
-            configs.put(key, tip);
+            tips.put(key, tip);
         });
-        Main.getLogger().info("ArcartX 加载Tip {} 个", configs.size());
+        Main.getLogger().info("ArcartX -> 加载Tip {} 个", tips.size());
 
 
     }

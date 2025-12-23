@@ -1,19 +1,14 @@
-package org.qiuhua.troveserver.skill;
+package org.qiuhua.troveserver.module.role;
 
 import lombok.Getter;
-import lombok.ToString;
-import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.meta.IMeta;
 import org.qiuhua.troveserver.api.skill.AbstractSkillMechanic;
-import org.qiuhua.troveserver.module.item.ItemCompileData;
-import org.qiuhua.troveserver.module.role.AttributesData;
 import org.qiuhua.troveserver.utils.StringUtils;
 import org.qiuhua.troveserver.utils.yaml.ConfigurationSection;
 import org.qiuhua.troveserver.utils.yaml.file.YamlConfiguration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +19,7 @@ import java.util.regex.Pattern;
 /**
  * 这个是属于技能配置文件的配置数据
  */
-public class SkillConfigData implements IMeta {
-
-
-    private final YamlConfiguration config;
+public class RoleSkillConfigData implements IMeta {
 
     /**
      * 技能自带的元数据
@@ -62,9 +54,8 @@ public class SkillConfigData implements IMeta {
 
 
 
-    public SkillConfigData(String skillName, YamlConfiguration config, @Nullable AbstractSkillMechanic skillMechanic){
+    public RoleSkillConfigData(String skillName, YamlConfiguration config, @Nullable AbstractSkillMechanic skillMechanic){
         this.skillMechanic = skillMechanic;
-        this.config = config;
         this.skillName = skillName;
         ConfigurationSection metaSection = config.getConfigurationSection("Meta");
         for (String key : metaSection.getKeys(false)){

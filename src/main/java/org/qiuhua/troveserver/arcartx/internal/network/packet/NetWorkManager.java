@@ -58,6 +58,9 @@ public class NetWorkManager {
         this.registerPacket(MessageID.Client.INITIALIZE, CPackInitialized.class);
         this.registerPacket(MessageID.Client.SCREEN_DO, CPackDoWithScreen.class);
         this.registerPacket(MessageID.Client.CUSTOM, CPackCustomPacket.class);
+        this.registerPacket(MessageID.Client.KEY_GROUP_PRESS, CPackKeyGroupPress.class);
+        this.registerPacket(MessageID.Client.SIMPLE_KEY_PRESS, CPackSimpleKeyPress.class);
+        this.registerPacket(MessageID.Client.KEY_PRESS, CPackClientKey.class);
         //注册插件消息监听器
         MinecraftServer.getGlobalEventHandler().addListener(PlayerPluginMessageEvent.class, this::onPlayerPluginMessageEvent);
     }
@@ -177,7 +180,7 @@ public class NetWorkManager {
                 PacketBase packet = gson.fromJson(decodedMsg, packetClass);
                 if (packet != null) {
                     // 执行数据包处理
-                    packet.handle(player);
+                    packet.run(player);
                     //Main.getLogger().debug("处理消息类型: {}", code);
                 }
             }

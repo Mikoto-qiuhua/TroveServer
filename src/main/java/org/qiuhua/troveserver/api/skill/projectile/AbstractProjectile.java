@@ -21,14 +21,9 @@ import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.worldseed.multipart.model_bones.ModelBoneImpl;
-import net.worldseed.multipart.model_bones.bone_types.HitboxBone;
-import net.worldseed.multipart.model_bones.misc.ModelBoneHitbox;
-import org.qiuhua.troveserver.Main;
+
 import org.qiuhua.troveserver.api.entity.AbstractDisplayEntity;
 import org.qiuhua.troveserver.api.entity.AbstractEntity;
-import org.qiuhua.troveserver.module.models.ModelsManager;
-import org.qiuhua.troveserver.player.RPGPlayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -471,9 +466,6 @@ public abstract class AbstractProjectile extends AbstractDisplayEntity {
                 //跳过自己
                 if(entity == this) continue;
 
-                //这里要检查是否是碰撞箱实体
-                entity = ModelsManager.getParentEntity(entity);
-                if(entity == null) continue;
                 if(entity instanceof AbstractEntity || entity instanceof Player){
 
                     //跳过施法者
@@ -482,8 +474,8 @@ public abstract class AbstractProjectile extends AbstractDisplayEntity {
                     //如果没开命中玩家 并且实体是玩家类型 那就跳过
                     if(!inPlayer && entity instanceof Player) continue;
 
-                    //如果没开命中实体 那就跳过
-                    if(!inEntity) continue;
+                    //如果没开命中实体 并且是非玩家类型 那就跳过
+                    if(!inEntity && !(entity instanceof Player)) continue;
 
                     //如果上一次命中小于间隔那就跳过
                     if(hitEntityCache.containsKey(entity) && (time - hitEntityCache.get(entity)) < hitDelay) continue;

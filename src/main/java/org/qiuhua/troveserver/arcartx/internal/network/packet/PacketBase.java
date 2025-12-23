@@ -2,6 +2,7 @@ package org.qiuhua.troveserver.arcartx.internal.network.packet;
 
 import net.minestom.server.entity.Player;
 import org.qiuhua.troveserver.Main;
+import org.qiuhua.troveserver.utils.task.SchedulerManager;
 
 public interface PacketBase {
 
@@ -26,9 +27,11 @@ public interface PacketBase {
      */
     default void run(Player player) {
         if (isAsync()) {
-            Main.getLogger().debug("异步数据包处理");
+            SchedulerManager.submitAsync(()->{
+                this.handle(player);
+            });
         } else {
-            Main.getLogger().debug("同步数据包处理");
+            this.handle(player);
         }
     }
 

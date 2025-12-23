@@ -69,7 +69,9 @@ public class CPackCustomPacket implements PacketBase {
         }
 
         //触发自定义数据包事件
-        MinecraftServer.getGlobalEventHandler().call(new ClientCustomPacketEvent(player, packetId, packetData));
+        ClientCustomPacketEvent clientCustomPacketEvent = new ClientCustomPacketEvent(player, packetId, packetData);
+        MinecraftServer.getGlobalEventHandler().call(clientCustomPacketEvent);
+        if(clientCustomPacketEvent.isCancelled()) return;
 
         //处理UI相关的数据包
         if (this.name != null && "ui".equals(this.type)) {
@@ -110,6 +112,7 @@ public class CPackCustomPacket implements PacketBase {
             }
         }
     }
+
 
 
 

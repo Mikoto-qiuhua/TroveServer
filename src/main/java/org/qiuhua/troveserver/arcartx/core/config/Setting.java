@@ -44,8 +44,6 @@ public class Setting implements IConfig {
     public static List<Long> crc64_list = new ArrayList<>();
 
 
-
-    public static YamlConfiguration config;
     /**
      *
      */
@@ -62,7 +60,7 @@ public class Setting implements IConfig {
         if (!(new File(FileUtils.getDataFolder() , "arcartx/setting.yml").exists())){
             FileUtils.saveResource("arcartx/setting.yml", false);
         }
-        config = FileUtils.loadFile("arcartx/setting.yml");
+        YamlConfiguration config = FileUtils.loadFile("arcartx/setting.yml");
         //加载客户端标题
         clientTitle = config.getString("clientTitle","欢迎使用Minestom-ArcartX,该标题可在setting.yml修改");
 

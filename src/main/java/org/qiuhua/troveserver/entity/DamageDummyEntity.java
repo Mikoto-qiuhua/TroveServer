@@ -4,26 +4,25 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.timer.TaskSchedule;
-import net.worldseed.multipart.events.ModelInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import org.qiuhua.troveserver.Main;
+import org.qiuhua.troveserver.api.entity.AbstractEntity;
 import org.qiuhua.troveserver.api.entity.IMobCreature;
 import org.qiuhua.troveserver.entity.display.TextDisplayEntity;
 import org.qiuhua.troveserver.module.mob.MobConfig;
 import org.qiuhua.troveserver.player.RPGPlayer;
 import org.qiuhua.troveserver.skill.targeter.LocationUtils;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
-public class DamageDummyEntity extends ModelEntity implements IMobCreature {
+public class DamageDummyEntity extends AbstractEntity implements IMobCreature {
 
 
     /**
@@ -83,7 +82,7 @@ public class DamageDummyEntity extends ModelEntity implements IMobCreature {
 
 
     public DamageDummyEntity() {
-        super("damagedummy.bbmodel", EntityType.ZOMBIE);
+        super(EntityType.ZOMBIE);
         setNoGravity(false);
         //关掉他的自动显示 全部由本体进行
         topText.setAutoViewEntities(false);
@@ -95,12 +94,12 @@ public class DamageDummyEntity extends ModelEntity implements IMobCreature {
 
         //给这个模型对象添加交互事件
         //处理玩家潜行交互时激活打桩
-        getModelsData().eventNode().addListener(ModelInteractEvent.class, event ->{
-            RPGPlayer rpgPlayer = (RPGPlayer) event.getInteracted();
-            if(!trainingMode && rpgPlayer.isSneaking()){
-                startTraining(rpgPlayer, 600);
-            }
-        });
+//        getModelsData().eventNode().addListener(ModelInteractEvent.class, event ->{
+//            RPGPlayer rpgPlayer = (RPGPlayer) event.getInteracted();
+//            if(!trainingMode && rpgPlayer.isSneaking()){
+//                startTraining(rpgPlayer, 600);
+//            }
+//        });
         //实体受伤事件
         eventNode().addListener(EntityDamageEvent.class, event -> {
             if(event.isCancelled()) return;
@@ -234,7 +233,6 @@ public class DamageDummyEntity extends ModelEntity implements IMobCreature {
      */
     @Override
     public void spawnEntity(MobConfig mobConfig, String settingsId, Instance instance, Pos pos) {
-        setDisplayName(mobConfig.getDisplayName()).setDisplayHealth(mobConfig.getDisplayHealth());
         mobConfig.setSettings(settingsId, this);
         spawnEntity(instance, pos);
     }
@@ -246,7 +244,6 @@ public class DamageDummyEntity extends ModelEntity implements IMobCreature {
         topText.spawnEntity(instance, pos.add(0, 2.2, 0).withPitch(0));
         leftText.spawnEntity(instance, LocationUtils.relativeLocationOffset(pos.withPitch(0), 0, 3, 3));
         rightText.spawnEntity(instance, LocationUtils.relativeLocationOffset(pos.withPitch(0), 0, -1.1, 1.8));
-        super.spawnEntity(instance, pos.withPitch(0));
         setHealth((float) this.getAttribute(Attribute.MAX_HEALTH).attribute().maxValue());
     }
 
@@ -276,4 +273,11 @@ public class DamageDummyEntity extends ModelEntity implements IMobCreature {
     }
 
 
+    /**
+     * @return
+     */
+    @Override
+    public LivingEntity getEntity() {
+        return this;
+    }
 }

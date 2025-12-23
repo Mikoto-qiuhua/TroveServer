@@ -7,12 +7,13 @@ import org.qiuhua.troveserver.utils.yaml.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ConfigManager {
 
     @Getter
-    private final static Map<String, IConfig> allConfig = new HashMap<>();
+    private final static LinkedHashMap<String, IConfig> allConfig = new LinkedHashMap<>();
 
 
     /**

@@ -1,8 +1,6 @@
 
 #实体显示的名称
 DisplayName: "训练假人"
-#是否显示血条纹理
-DisplayHealth: false
 #所使用的实体对象
 MobClassId: "DamageDummyEntity"
 

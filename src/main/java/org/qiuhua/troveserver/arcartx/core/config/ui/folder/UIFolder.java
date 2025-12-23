@@ -34,6 +34,6 @@ public class UIFolder implements IConfig {
                 ArcartXUIRegistry.register(key, config);
             }
         });
-        Main.getLogger().info("ArcartX 加载UI {} 个", ArcartXUIRegistry.registeredUI.size());
+        Main.getLogger().info("ArcartX -> 加载UI {} 个", ArcartXUIRegistry.registeredUI.size());
     }
 }

@@ -2,17 +2,14 @@ package org.qiuhua.troveserver.module.mob;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.tag.Tag;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.entity.IMobCreature;
 import org.qiuhua.troveserver.config.ConfigManager;
 import org.qiuhua.troveserver.entity.DamageDummyEntity;
-import org.qiuhua.troveserver.entity.ModelEntity;
 import org.qiuhua.troveserver.module.mob.command.MobCommand;
 import org.qiuhua.troveserver.module.mob.config.MobFileConfig;
 
@@ -45,7 +42,6 @@ public class MobManager {
         MinecraftServer.getGlobalEventHandler().addChild(mobNode.setPriority(1));
         ConfigManager.loadConfig("mob", "mobs", new MobFileConfig());
         new MobCommand();
-
     }
 
     /**

@@ -6,7 +6,6 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import org.qiuhua.troveserver.api.skill.AbstractSkillMechanic;
 import org.qiuhua.troveserver.config.ConfigManager;
-import org.qiuhua.troveserver.module.role.listener.RoleArmsListener;
 import org.qiuhua.troveserver.module.role.ui.RoleMainUi;
 import org.qiuhua.troveserver.skill.SkillMetadata;
 import org.qiuhua.troveserver.skill.mechanics.warrior.Warrior_Skill_1;
@@ -17,7 +16,6 @@ import org.qiuhua.troveserver.module.role.config.RoleConfig;
 import org.qiuhua.troveserver.module.role.config.RoleFileConfig;
 import org.qiuhua.troveserver.module.role.config.SkillFileConfig;
 import org.qiuhua.troveserver.module.role.listener.JumpSprintListener;
-import org.qiuhua.troveserver.skill.SkillConfigData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +34,7 @@ public class RoleManager {
     /**
      * 技能合集 这里都是可以直接释放的技能
      */
-    public static final Map<String, SkillConfigData> skillMechanicMap = new HashMap<>();
+    public static final Map<String, RoleSkillConfigData> skillMechanicMap = new HashMap<>();
 
     /**
      * 注册的技能对象
@@ -59,7 +57,6 @@ public class RoleManager {
         ConfigManager.loadConfig("role", "ui", new RoleMainUi());
 
         new JumpSprintListener();
-        new RoleArmsListener();
         new RoleCommand();
 
     }
@@ -71,10 +68,10 @@ public class RoleManager {
      * @param skillName 技能名称
      */
     public static void castSkill(Entity entity, String skillName){
-        SkillConfigData skillConfigData = skillMechanicMap.get(skillName);
-        if(skillConfigData != null && skillConfigData.getSkillMechanic() != null){
+        RoleSkillConfigData roleSkillConfigData = skillMechanicMap.get(skillName);
+        if(roleSkillConfigData != null && roleSkillConfigData.getSkillMechanic() != null){
             SkillMetadata skillMetadata = new SkillMetadata(entity, entity.getPosition());
-            skillConfigData.getSkillMechanic().execute(skillMetadata, entity);
+            roleSkillConfigData.getSkillMechanic().execute(skillMetadata, entity);
         }
     }
 
@@ -85,11 +82,11 @@ public class RoleManager {
      * @param meta 元数据
      */
     public static void castSkill(Entity entity, String skillName, Map<String, Object> meta){
-        SkillConfigData skillConfigData = skillMechanicMap.get(skillName);
-        if(skillConfigData != null && skillConfigData.getSkillMechanic() != null){
+        RoleSkillConfigData roleSkillConfigData = skillMechanicMap.get(skillName);
+        if(roleSkillConfigData != null && roleSkillConfigData.getSkillMechanic() != null){
             SkillMetadata skillMetadata = new SkillMetadata(entity, entity.getPosition());
             skillMetadata.getMeta().putAll(meta);
-            skillConfigData.getSkillMechanic().execute(skillMetadata, entity);
+            roleSkillConfigData.getSkillMechanic().execute(skillMetadata, entity);
         }
     }
 

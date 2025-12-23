@@ -141,13 +141,14 @@ public class PlayerModeManager {
      */
     public static void switchBuildInventory(RPGPlayer rpgPlayer){
         rpgPlayer.setEquipment(EquipmentSlot.OFF_HAND, RoleConfig.sprintItem);
-        for(int i = 0; i != 8; i++){
+        for(int i = 0; i <= 8; i++){
             List<ItemStack> list = rpgPlayer.getBuildModeInventory();
             ItemStack itemStack = ItemStack.AIR;
             if(list.size() >= i+1){
                 itemStack = list.get(i);
             }
             rpgPlayer.getInventory().setItemStack(i, itemStack);
+            Main.getLogger().debug(itemStack.toString());
         }
         Main.getLogger().debug("{} 将快捷栏替换为建造栏位", rpgPlayer.getUsername());
 

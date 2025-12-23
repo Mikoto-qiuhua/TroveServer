@@ -3,6 +3,8 @@ package org.qiuhua.troveserver.module.item.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentResourceLocation;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import net.minestom.server.item.ItemStack;
@@ -29,7 +31,7 @@ public class ItemCommand extends AbstractCommand {
     private static class Give extends Command {
         public Give() {
             super("give");
-            ArgumentString itemId = ArgumentType.String("itemId");
+            ArgumentWord itemId = ArgumentType.Word("itemId");
             ArgumentInteger amount = ArgumentType.Integer("amount");
             amount.setDefaultValue(1);
             itemId.setSuggestionCallback((commandSender, commandContext, suggestion) -> {

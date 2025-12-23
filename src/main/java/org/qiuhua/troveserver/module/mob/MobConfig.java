@@ -15,8 +15,6 @@ import java.util.Map;
 
 public class MobConfig {
 
-    @Getter
-    private final YamlConfiguration config;
 
     @Getter
     private final String mobId;
@@ -27,16 +25,8 @@ public class MobConfig {
     @Getter
     private final String displayName;
 
-    /**
-     * 是否显示血条纹理
-     */
-    @Getter
-    private final Boolean displayHealth;
-
-
     @Getter
     private final String mobClassId;
-
 
 
     private final Map<String, MobSettingsData> mobSettingsDataMap = new HashMap<>();
@@ -44,10 +34,8 @@ public class MobConfig {
 
 
     public MobConfig(String mobId, YamlConfiguration config){
-        this.config = config;
         this.mobId = mobId;
         displayName = config.getString("DisplayName", null);
-        displayHealth = config.getBoolean("DisplayHealth", false);
         mobClassId = config.getString("MobClassId", null);
         ConfigurationSection settingsSection = config.getConfigurationSection("Settings");
         if(settingsSection != null){

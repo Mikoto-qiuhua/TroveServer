@@ -1,18 +1,11 @@
 package org.qiuhua.troveserver.module.role.ui;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import lombok.Getter;
-import lombok.Setter;
-import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.config.IConfig;
-import org.qiuhua.troveserver.arcartx.core.config.ui.type.UI;
 import org.qiuhua.troveserver.arcartx.core.ui.ArcartXUIRegistry;
 import org.qiuhua.troveserver.arcartx.core.ui.adapter.ArcartXUI;
 import org.qiuhua.troveserver.arcartx.core.ui.adapter.CallBackType;
@@ -21,7 +14,6 @@ import org.qiuhua.troveserver.module.attribute.AttributeManager;
 import org.qiuhua.troveserver.module.role.RoleData;
 import org.qiuhua.troveserver.player.RPGPlayer;
 import org.qiuhua.troveserver.utils.FileUtils;
-import org.qiuhua.troveserver.utils.task.SchedulerManager;
 import org.qiuhua.troveserver.utils.yaml.file.YamlConfiguration;
 
 import java.io.File;
@@ -55,11 +47,6 @@ public class RoleMainUi implements IConfig {
         config = FileUtils.loadFile("role/ui.yml");
         ArcartXUIRegistry.reload("Role:Main", config);
         Main.getLogger().info("已重新加载角色界面UI | ID: Role:Main");
-
-        //临时 顺带重载资源
-        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> {
-            NetworkMessageSender.sendResourceReload(player, true);
-        });
 
     }
 
@@ -222,7 +209,7 @@ public class RoleMainUi implements IConfig {
         roleData.getRoleSkillDataList().forEach(roleSkillData -> {
             Map<String, Object> map = new HashMap<>();
             map.put("skillName", roleSkillData.getSkillName());
-            map.put("packet", roleSkillData.getSkillConfigData().getPacket());
+            map.put("packet", roleSkillData.getRoleSkillConfigData().getPacket());
             skills.add(map);
         });
         roleDataPacket.put("skills", skills);

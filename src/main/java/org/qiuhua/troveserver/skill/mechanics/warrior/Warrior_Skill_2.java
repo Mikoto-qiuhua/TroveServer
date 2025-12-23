@@ -3,23 +3,16 @@ package org.qiuhua.troveserver.skill.mechanics.warrior;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.Viewable;
-import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
-import net.minestom.server.item.ItemStack;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.skill.AbstractSkillMechanic;
-import org.qiuhua.troveserver.entity.PlayerBindingModelEntity;
 import org.qiuhua.troveserver.entity.display.ItemDisplayEntity;
 import org.qiuhua.troveserver.fight.PhysicalDamage;
 import org.qiuhua.troveserver.module.attribute.AttributeManager;
-import org.qiuhua.troveserver.module.role.listener.RoleArmsListener;
 import org.qiuhua.troveserver.player.RPGPlayer;
 import org.qiuhua.troveserver.skill.SkillMetadata;
 import org.qiuhua.troveserver.skill.event.CastSkillEvent;
@@ -27,8 +20,6 @@ import org.qiuhua.troveserver.skill.mechanics.ProjectileMechanic;
 import org.qiuhua.troveserver.skill.mechanics.pos.LungeMechanic;
 import org.qiuhua.troveserver.skill.targeter.PosTargetSelector;
 import org.qiuhua.troveserver.utils.ItemAnimationController;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 骑士职业的2技能
@@ -87,12 +78,7 @@ public class Warrior_Skill_2 extends AbstractSkillMechanic {
             //设置冷却
             rpgPlayer.setItemCooldown("warrior:skill2", (int) (cooldown * 20));
             //武器模型动画
-            PlayerBindingModelEntity playerBindingModelEntity = RoleArmsListener.playerArmsMap.get(rpgPlayer);
-            if(playerBindingModelEntity != null){
-                playerBindingModelEntity.getModelsData().getAnimationManager().playOnceAnimation("skill2", true, animationManager -> {
 
-                });
-            }
         }
 
         //创建一个往前的抛射物

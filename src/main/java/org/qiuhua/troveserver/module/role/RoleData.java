@@ -33,11 +33,6 @@ public class RoleData {
     @Getter
     private final String roleId;
 
-    /**
-     * 配置文件
-     */
-    @Getter
-    private final YamlConfiguration config;
 
     /**
      * 角色是否不可见
@@ -122,7 +117,6 @@ public class RoleData {
     public RoleData(String roleId, YamlConfiguration config, RPGPlayer rpgPlayer) {
         this.rpgPlayer = rpgPlayer;
         this.roleId = roleId;
-        this.config = config;
         hide = config.getBoolean("Hide", false);
         testModel = config.getBoolean("TestModel", false);
         //加载trace

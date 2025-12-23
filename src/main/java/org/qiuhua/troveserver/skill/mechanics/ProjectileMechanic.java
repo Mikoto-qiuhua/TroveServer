@@ -1,8 +1,6 @@
 package org.qiuhua.troveserver.skill.mechanics;
 
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.qiuhua.troveserver.api.skill.projectile.AbstractProjectile;
 

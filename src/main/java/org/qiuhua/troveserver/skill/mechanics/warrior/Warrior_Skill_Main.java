@@ -7,14 +7,10 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.skill.AbstractSkillMechanic;
-import org.qiuhua.troveserver.entity.PlayerBindingModelEntity;
 import org.qiuhua.troveserver.fight.PhysicalDamage;
-import org.qiuhua.troveserver.entity.display.ItemDisplayEntity;
 import org.qiuhua.troveserver.module.attribute.AttributeManager;
-import org.qiuhua.troveserver.module.role.listener.RoleArmsListener;
 import org.qiuhua.troveserver.skill.SkillMetadata;
 import org.qiuhua.troveserver.skill.event.CastSkillEvent;
 import org.qiuhua.troveserver.skill.mechanics.ProjectileMechanic;
@@ -110,12 +106,7 @@ public class Warrior_Skill_Main extends AbstractSkillMechanic {
 
         //武器模型动画
         if(casterEntity instanceof RPGPlayer rpgPlayer){
-            PlayerBindingModelEntity playerBindingModelEntity = RoleArmsListener.playerArmsMap.get(rpgPlayer);
-            if(playerBindingModelEntity != null){
-                playerBindingModelEntity.getModelsData().getAnimationManager().playOnceAnimation(animationId, false, animationManager -> {
 
-                });
-            }
         }
 
         //创建一个原地的抛射物

@@ -1,17 +1,30 @@
 package org.qiuhua.troveserver.arcartx.event.client;
 
 import lombok.Getter;
+import lombok.Setter;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class ClientCustomPacketEvent implements PlayerEvent {
+/**
+ * 客户端自定义数据包事件
+ */
+public class ClientCustomPacketEvent implements PlayerEvent, CancellableEvent {
 
     @Getter
     private final Player player;
+
+    @Setter
+    private boolean cancelled = false;
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
 
     /**
      * 数据包ID

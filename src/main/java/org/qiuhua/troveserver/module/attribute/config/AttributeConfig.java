@@ -22,8 +22,6 @@ import java.util.Map;
 
 public class AttributeConfig implements IConfig {
 
-    public static YamlConfiguration config;
-
     public static List<String> base_attribute_player = new ArrayList<>();
 
     public static Map<String, VanillaAttributeConfig> vanillaAttributeConfigMap = new HashMap<>();
@@ -49,7 +47,7 @@ public class AttributeConfig implements IConfig {
         if (!(new File(FileUtils.getDataFolder() , "attribute/config.yml").exists())){
             FileUtils.saveResource("attribute/config.yml", false);
         }
-        config = FileUtils.loadFile("attribute/config.yml");
+        YamlConfiguration config = FileUtils.loadFile("attribute/config.yml");
         base_attribute_player = config.getStringList("base_attribute_player");
 
         ConfigurationSection vanillaSection = config.getConfigurationSection("vanilla");
