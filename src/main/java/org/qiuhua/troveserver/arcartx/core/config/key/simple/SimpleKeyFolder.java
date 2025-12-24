@@ -2,10 +2,8 @@ package org.qiuhua.troveserver.arcartx.core.config.key.simple;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import org.jetbrains.annotations.Nullable;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.config.IConfig;
-import org.qiuhua.troveserver.arcartx.core.config.key.group.KeyGroupElement;
 import org.qiuhua.troveserver.arcartx.internal.network.packet.NetworkMessageSender;
 import org.qiuhua.troveserver.arcartx.util.collections.KeyCallBack;
 import org.qiuhua.troveserver.config.ConfigManager;
@@ -21,7 +19,7 @@ import java.util.Map;
 public class SimpleKeyFolder implements IConfig {
 
 
-    public static final HashMap<String, SimpleKeyElement> simpleKey = new HashMap<>();
+    public static final HashMap<String, SimpleKeyElement> simpleKeys = new HashMap<>();
 
     /**
      * 重载配置
@@ -36,7 +34,7 @@ public class SimpleKeyFolder implements IConfig {
      */
     @Override
     public void load() {
-        simpleKey.clear();
+        simpleKeys.clear();
         if (!(new File(FileUtils.getDataFolder() , "arcartx/key_bind/simple_key").exists())){
             FileUtils.saveResource("arcartx/key_bind/simple_key/简单按键示例.yml", false);
         }
@@ -44,7 +42,7 @@ public class SimpleKeyFolder implements IConfig {
         map.values().forEach(config -> {
             for(String key : config.getKeys(false)){
                 List<String> keys = config.getStringList(key + ".keys");
-                simpleKey.put(key, new SimpleKeyElement(key, keys));
+                simpleKeys.put(key, new SimpleKeyElement(key, keys));
             }
         });
 
@@ -66,9 +64,7 @@ public class SimpleKeyFolder implements IConfig {
 
             }
         });
-
-
-        Main.getLogger().info("ArcartX -> 加载Simple_Key {} 个", simpleKey.size());
+        Main.getLogger().info("ArcartX -> 加载SimpleKey {} 个", simpleKeys.size());
     }
 
     /**
@@ -78,7 +74,7 @@ public class SimpleKeyFolder implements IConfig {
      */
     public static SimpleKeyElement register(String id, List<String> keys){
         SimpleKeyElement simpleKeyElement = new SimpleKeyElement(id, keys);
-        simpleKey.put(id, simpleKeyElement);
+        simpleKeys.put(id, simpleKeyElement);
         return simpleKeyElement;
     }
 

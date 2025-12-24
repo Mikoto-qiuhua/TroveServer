@@ -2,6 +2,10 @@ package org.qiuhua.troveserver.arcartx.internal.network.packet.server;
 
 import com.google.gson.annotations.SerializedName;
 import org.qiuhua.troveserver.arcartx.core.config.Setting;
+import org.qiuhua.troveserver.arcartx.core.config.camera.CameraElement;
+import org.qiuhua.troveserver.arcartx.core.config.camera.CameraPresetFolder;
+import org.qiuhua.troveserver.arcartx.core.config.camera.CameraSetting;
+import org.qiuhua.troveserver.arcartx.core.config.font.FontIconFolder;
 import org.qiuhua.troveserver.arcartx.core.config.key.client.ClientKeyFolder;
 import org.qiuhua.troveserver.arcartx.core.config.key.group.KeyGroupFolder;
 import org.qiuhua.troveserver.arcartx.core.config.key.simple.SimpleKeyFolder;
@@ -9,6 +13,7 @@ import org.qiuhua.troveserver.arcartx.core.config.ui.folder.TipFolder;
 import org.qiuhua.troveserver.arcartx.core.config.ui.type.Tip;
 import org.qiuhua.troveserver.arcartx.core.config.ui.type.UI;
 import org.qiuhua.troveserver.arcartx.core.ui.ArcartXUIRegistry;
+import org.qiuhua.troveserver.config.ConfigManager;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,16 +30,15 @@ public class SPackSettings implements ServerPacketBase{
 
     /**
      * 字体图标
-     * 未实现
      */
     @SerializedName(value="fontIconSetting")
-    private final Map<Integer, String> fontIconSetting = new HashMap<>();
+    private final Map<Integer, String> fontIconSetting = new HashMap<>(FontIconFolder.fontIcons);
 
     /**
      * 客户端按键
      */
     @SerializedName(value="clientKeyElements")
-    private final Map<String, Object> clientKeyElements = new HashMap<>(ClientKeyFolder.clientKey);
+    private final Map<String, Object> clientKeyElements = new HashMap<>(ClientKeyFolder.clientKeys);
 
     /**
      * 按键组
@@ -46,7 +50,7 @@ public class SPackSettings implements ServerPacketBase{
      * 简单按键
      */
     @SerializedName(value="simpleKeyElements")
-    private final Map<String, Object> simpleKeyElements = new HashMap<>(SimpleKeyFolder.simpleKey);
+    private final Map<String, Object> simpleKeyElements = new HashMap<>(SimpleKeyFolder.simpleKeys);
 
     /**
      * UI配置
@@ -122,14 +126,14 @@ public class SPackSettings implements ServerPacketBase{
      * 未实现
      */
     @SerializedName(value="camera_preset")
-    private final Map<String, Object> cameraData = new HashMap<>();
+    private final Map<String, CameraElement> cameraData = new HashMap<>(CameraPresetFolder.cameraPresets);
 
     /**
      * 相机设置
      * 未实现
      */
     @SerializedName(value="camera_setting")
-    private final Object cameraSetting = new Object();
+    private final CameraSetting cameraSetting = (CameraSetting) ConfigManager.getAllConfig().get("arcartx:camera_setting");
 
     /**
      * 导航点

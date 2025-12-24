@@ -43,8 +43,7 @@ public class KeyGroupFolder implements IConfig {
                 keyGroups.put(key, new KeyGroupElement(key, keys, interval));
             }
         });
-
-        Main.getLogger().info("ArcartX -> 加载Client_Key {} 个", keyGroups.size());
+        Main.getLogger().info("ArcartX -> 加载KeyGroup {} 个", keyGroups.size());
     }
 
 

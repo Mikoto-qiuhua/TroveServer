@@ -322,7 +322,7 @@ public class ArcartXPlayer extends ArcartXEntity{
      * @param enable 是否启用
      */
     public final void setThirdPerson(boolean enable) {
-        // TODO: 发送第三人称视角
+        NetworkMessageSender.setThirdPerson(this.player, enable);
     }
 
     /**
@@ -330,8 +330,7 @@ public class ArcartXPlayer extends ArcartXEntity{
      * @param enable 是否启用
      */
     public final void setViewLock(boolean enable) {
-        int mode = enable ? 2 : 0;
-        // TODO: 发送视角锁定
+        NetworkMessageSender.setViewLock(this.player, enable ? 2 : 0);
     }
 
     /**
@@ -339,7 +338,7 @@ public class ArcartXPlayer extends ArcartXEntity{
      * @param mode 模式
      */
     public final void setViewLockMode(int mode) {
-        // TODO: 发送视角锁定模式
+        NetworkMessageSender.setViewLock(this.player, mode);
     }
 
     /**
@@ -347,7 +346,7 @@ public class ArcartXPlayer extends ArcartXEntity{
      * @param id 预设ID
      */
     public final void setCameraFromPreset(String id) {
-        // TODO: 发送设置摄像机
+        NetworkMessageSender.setCameraFromPreset(this.player, id);
     }
 
     /**
@@ -358,7 +357,7 @@ public class ArcartXPlayer extends ArcartXEntity{
      * @param freeView 是否自由视角
      */
     public final void setCameraLocation(double offsetX, double offsetY, double offsetZ, boolean freeView) {
-        // TODO: 发送摄像机位置
+        NetworkMessageSender.setCamera(this.player, offsetX, offsetY, offsetZ, freeView);
     }
 
     /**
@@ -366,14 +365,14 @@ public class ArcartXPlayer extends ArcartXEntity{
      * @param sceneId 场景ID
      */
     public final void startSceneCamera(String sceneId) {
-        // TODO: 发送场景摄像机
+        NetworkMessageSender.sendSceneCamera(this.player, sceneId);
     }
 
     /**
      * 停止场景摄像机
      */
     public final void stopSceneCamera() {
-        // TODO: 发送停止场景摄像机
+        NetworkMessageSender.sendSceneCameraStop(this.player);
     }
 
 

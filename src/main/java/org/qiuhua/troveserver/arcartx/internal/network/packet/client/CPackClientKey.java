@@ -41,7 +41,7 @@ public class CPackClientKey implements PacketBase {
     @Override
     public void handle(Player player) {
         //获取按键配置
-        ClientKeyElement clientKeyElement = ClientKeyFolder.clientKey.get(this.keyID);
+        ClientKeyElement clientKeyElement = ClientKeyFolder.clientKeys.get(this.keyID);
         if(clientKeyElement == null) return;
         //处理按键按下事件
         if(this.isDown) {

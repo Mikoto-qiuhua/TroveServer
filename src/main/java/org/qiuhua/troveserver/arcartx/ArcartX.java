@@ -5,9 +5,12 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.*;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.arcartx.core.config.Setting;
+import org.qiuhua.troveserver.arcartx.core.config.camera.CameraPresetFolder;
+import org.qiuhua.troveserver.arcartx.core.config.camera.CameraSetting;
+import org.qiuhua.troveserver.arcartx.core.config.camera.SceneCameraFolder;
+import org.qiuhua.troveserver.arcartx.core.config.font.FontIconFolder;
 import org.qiuhua.troveserver.arcartx.core.config.key.client.ClientKeyFolder;
 import org.qiuhua.troveserver.arcartx.core.config.key.group.KeyGroupFolder;
-import org.qiuhua.troveserver.arcartx.core.config.key.simple.SimpleKeyElement;
 import org.qiuhua.troveserver.arcartx.core.config.key.simple.SimpleKeyFolder;
 import org.qiuhua.troveserver.arcartx.core.config.ui.folder.TipFolder;
 import org.qiuhua.troveserver.arcartx.core.config.ui.folder.UIFolder;
@@ -16,11 +19,7 @@ import org.qiuhua.troveserver.arcartx.event.client.ClientChannelEvent;
 import org.qiuhua.troveserver.arcartx.event.client.ClientInitializedEvent;
 import org.qiuhua.troveserver.arcartx.internal.network.packet.NetWorkManager;
 import org.qiuhua.troveserver.arcartx.internal.network.packet.NetworkMessageSender;
-import org.qiuhua.troveserver.arcartx.util.collections.KeyCallBack;
 import org.qiuhua.troveserver.config.ConfigManager;
-import org.qiuhua.troveserver.config.ServerConfig;
-
-import java.util.List;
 
 public class ArcartX {
 
@@ -37,6 +36,11 @@ public class ArcartX {
         ConfigManager.loadConfig("arcartx", "client_key", new ClientKeyFolder());
         ConfigManager.loadConfig("arcartx", "key_group", new KeyGroupFolder());
         ConfigManager.loadConfig("arcartx", "simple_key", new SimpleKeyFolder());
+        ConfigManager.loadConfig("arcartx", "font_icon", new FontIconFolder());
+        ConfigManager.loadConfig("arcartx", "camera_setting", new CameraSetting());
+        ConfigManager.loadConfig("arcartx", "camera_preset", new CameraPresetFolder());
+        ConfigManager.loadConfig("arcartx", "camera_scene", new SceneCameraFolder());
+
 
 
         //临时加载需要的监听器

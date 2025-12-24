@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.arcartx.core.config.key.simple.SimpleKeyElement;
 import org.qiuhua.troveserver.arcartx.core.config.key.simple.SimpleKeyFolder;
 import org.qiuhua.troveserver.arcartx.event.client.ClientSimpleKeyPressEvent;
@@ -38,7 +37,7 @@ public class CPackSimpleKeyPress implements PacketBase {
     @Override
     public void handle(Player player) {
         //获取按键配置
-        SimpleKeyElement simpleKeyElement = SimpleKeyFolder.simpleKey.get(this.name);
+        SimpleKeyElement simpleKeyElement = SimpleKeyFolder.simpleKeys.get(this.name);
         if(simpleKeyElement == null) return;
         //处理按键按下事件
         if(this.isDown) {

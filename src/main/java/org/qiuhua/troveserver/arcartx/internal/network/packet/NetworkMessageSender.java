@@ -9,6 +9,9 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import org.jetbrains.annotations.NotNull;
 import org.qiuhua.troveserver.Main;
+import org.qiuhua.troveserver.arcartx.core.config.camera.CameraElement;
+import org.qiuhua.troveserver.arcartx.core.config.camera.SceneCamera;
+import org.qiuhua.troveserver.arcartx.core.config.camera.SceneCameraFolder;
 import org.qiuhua.troveserver.arcartx.core.config.ui.type.UI;
 import org.qiuhua.troveserver.arcartx.core.entity.ArcartXEntityManager;
 import org.qiuhua.troveserver.arcartx.core.entity.data.ArcartXPlayer;
@@ -155,11 +158,77 @@ public class NetworkMessageSender {
      * @param isFirstWith 是否自动给末尾添加数字 例如 Slot_  = Slot_1 Slot_2 这样的槽位都移除物品
      */
     public static void sendSlotItemRemove(Player player, String id, boolean isFirstWith) {
-
         sendPacketSync(player, MessageID.Server.SLOT_ITEM_STACK, DecodeType.NORMAL, new SPackSlotItemStack(id, isFirstWith, true));
     }
 
 
+    /**
+     * 发送一个场景相机
+     * @param player
+     * @param name 场景相机名称
+     */
+    public static void sendSceneCamera(Player player, String name) {
+        SceneCamera sceneCamera = SceneCameraFolder.sceneCameras.get(name);
+        if (sceneCamera == null) return;
+        sendPacketSync(player, MessageID.Server.SCENE_CAMERA, DecodeType.NORMAL, new SPackSceneCamera(sceneCamera));
+
+    }
+
+    /**
+     * 停止玩家当前的场景相机
+     * @param player
+     */
+    public static void sendSceneCameraStop(Player player) {
+        sendPacketSync(player, MessageID.Server.SCENE_CAMERA, DecodeType.NORMAL, new SPackSceneCamera(null));
+    }
+
+    /**
+     * 给玩家设置相机
+     * @param player
+     * @param x
+     * @param y
+     * @param z
+     * @param freeView
+     */
+    public static void setCamera(Player player, double x, double y, double z, boolean freeView) {
+        sendPacketSync(player, MessageID.Server.CAMERA_SET, DecodeType.NORMAL, new SPackCamera(x, y, z, freeView));
+    }
+
+    /**
+     * 给玩家设置一个预设相机
+     * @param player
+     * @param presetName
+     */
+    public static void setCameraFromPreset(Player player, String presetName) {
+        sendPacketSync(player, MessageID.Server.CAMERA_PRESET, DecodeType.NORMAL, new SPackCameraPreset(presetName));
+    }
+
+    /**
+     * 给玩家设置一个相机
+     * @param player
+     * @param element
+     */
+    public static void setCameraFromElement(Player player, CameraElement element) {
+        sendPacketSync(player, MessageID.Server.CAMERA_ELEMENT, DecodeType.NORMAL, new SPackCameraElement(element));
+    }
+
+    /**
+     * 设置视角锁定
+     * @param player
+     * @param lockMode
+     */
+    public static void setViewLock(Player player, int lockMode) {
+        sendPacketSync(player, MessageID.Server.CAMERA_LOCK_MODE, DecodeType.NORMAL, new SPackLockView(lockMode));
+    }
+
+    /**
+     * 设置第三人称视角
+     * @param player
+     * @param thirdPerson
+     */
+    public static void setThirdPerson(Player player, boolean thirdPerson) {
+        sendPacketSync(player, MessageID.Server.CAMERA_THIRD_PERSON, DecodeType.NORMAL, new SPackThirdPerson(thirdPerson));
+    }
 
 
     /**

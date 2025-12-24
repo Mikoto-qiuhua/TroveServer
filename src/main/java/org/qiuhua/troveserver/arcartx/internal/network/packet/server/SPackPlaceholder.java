@@ -3,7 +3,6 @@ package org.qiuhua.troveserver.arcartx.internal.network.packet.server;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.ToString;
-import org.qiuhua.troveserver.Main;
 
 /**
  * 服务器发送自定义的数据包

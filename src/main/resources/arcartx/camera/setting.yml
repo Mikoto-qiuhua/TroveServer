@@ -1,0 +1,6 @@
+# 是否开启相机功能
+enable: true
+# 视角锁定模式，0-关闭，1-强制锁定第一人称，2-强制锁定第三人称
+forceMode: 0
+# 默认预设，请到preset文件夹创建预设
+default: "idle"

@@ -1,23 +1,18 @@
 package org.qiuhua.troveserver.arcartx.core.config.key.client;
 
-import org.jetbrains.annotations.Nullable;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.config.IConfig;
-import org.qiuhua.troveserver.arcartx.core.config.key.group.KeyGroupElement;
-import org.qiuhua.troveserver.arcartx.util.collections.KeyCallBack;
 import org.qiuhua.troveserver.utils.FileUtils;
 import org.qiuhua.troveserver.utils.yaml.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ClientKeyFolder implements IConfig {
 
 
-    public static final Map<String, ClientKeyElement> clientKey = new HashMap<>();
+    public static final Map<String, ClientKeyElement> clientKeys = new HashMap<>();
 
 
 
@@ -34,7 +29,7 @@ public class ClientKeyFolder implements IConfig {
      */
     @Override
     public void load() {
-        clientKey.clear();
+        clientKeys.clear();
         if (!(new File(FileUtils.getDataFolder() , "arcartx/key_bind/client_key").exists())){
             FileUtils.saveResource("arcartx/key_bind/client_key/客户端按键示例.yml", false);
         }
@@ -43,11 +38,11 @@ public class ClientKeyFolder implements IConfig {
             for(String key : config.getKeys(false)){
                 String category = config.getString(key + ".category", "ArcartX 自定义按键");
                 String defaultKey = config.getString(key + ".default", "M");
-                clientKey.put(key, new ClientKeyElement(key, category, defaultKey));
+                clientKeys.put(key, new ClientKeyElement(key, category, defaultKey));
             }
         });
 
-        Main.getLogger().info("ArcartX -> 加载Client_Key {} 个", clientKey.size());
+        Main.getLogger().info("ArcartX -> 加载ClientKey {} 个", clientKeys.size());
     }
 
 
@@ -59,7 +54,7 @@ public class ClientKeyFolder implements IConfig {
      */
     public static ClientKeyElement register(String id, String category, String defaultKey){
         ClientKeyElement clientKeyElement = new ClientKeyElement(id, category, defaultKey);
-        clientKey.put(id, clientKeyElement);
+        clientKeys.put(id, clientKeyElement);
         return clientKeyElement;
     }
 
