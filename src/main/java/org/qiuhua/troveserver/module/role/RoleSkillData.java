@@ -15,9 +15,7 @@ public class RoleSkillData implements IMeta {
 
 
     /**
-     * 触发器 -1=左键  其余为对应的快捷栏按键 正常情况只支持到0-3
-     * 0为右键技能
-     * 1-3为三个主动技能
+     * 触发器
      */
     @Getter
     private final String trigger;

@@ -136,8 +136,8 @@ public class CPackDoWithScreen implements PacketBase {
 
 
     /**
-     * 数据包是否异步处理
-     * @return false表示在主线程处理
+     * 是否异步执行
+     * @return true表示异步执行
      */
     @Override
     public boolean isAsync() {

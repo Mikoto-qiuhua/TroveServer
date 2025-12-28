@@ -113,7 +113,14 @@ public class CPackCustomPacket implements PacketBase {
         }
     }
 
-
+    /**
+     * 是否异步执行
+     * @return true表示异步执行
+     */
+    @Override
+    public boolean isAsync() {
+        return false;
+    }
 
 
 }

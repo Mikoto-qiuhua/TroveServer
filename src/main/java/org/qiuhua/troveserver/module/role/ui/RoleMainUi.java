@@ -1,6 +1,5 @@
 package org.qiuhua.troveserver.module.role.ui;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
@@ -9,8 +8,8 @@ import org.qiuhua.troveserver.api.config.IConfig;
 import org.qiuhua.troveserver.arcartx.core.ui.ArcartXUIRegistry;
 import org.qiuhua.troveserver.arcartx.core.ui.adapter.ArcartXUI;
 import org.qiuhua.troveserver.arcartx.core.ui.adapter.CallBackType;
-import org.qiuhua.troveserver.arcartx.internal.network.packet.NetworkMessageSender;
 import org.qiuhua.troveserver.module.attribute.AttributeManager;
+import org.qiuhua.troveserver.module.role.EquipSlotData;
 import org.qiuhua.troveserver.module.role.RoleData;
 import org.qiuhua.troveserver.player.RPGPlayer;
 import org.qiuhua.troveserver.utils.FileUtils;
@@ -33,7 +32,7 @@ public class RoleMainUi implements IConfig {
     /**
      * 玩家当前查看的界面数据
      */
-    private final static ConcurrentHashMap<UUID, ViewUiData> viewUiData = new ConcurrentHashMap<>();
+    private final static ConcurrentHashMap<UUID, ViewUiData> viewUiDataMap = new ConcurrentHashMap<>();
 
 
     /**
@@ -67,7 +66,7 @@ public class RoleMainUi implements IConfig {
         arcartXUI = ArcartXUIRegistry.register("Role:Main", config);
         arcartXUI.registerCallBack(CallBackType.CLOSE, callData -> {
             Player player = callData.getPlayer();
-            viewUiData.remove(player.getUuid());
+            viewUiDataMap.remove(player.getUuid());
         });
 
 
@@ -87,6 +86,16 @@ public class RoleMainUi implements IConfig {
                         if(data.size() == 1){
                             sendViewRolePacket(rpgPlayer, data.getFirst());
                         }
+                        break;
+                    //装备槽位交互
+                    case "handleEquipSlot":
+                        if(data.size() == 1){
+                            handleEquipSlot(rpgPlayer, data.getFirst());
+                        }
+                        break;
+                    //切换当前查看角色
+                    case "switchRole":
+                        switchRole(rpgPlayer);
                         break;
 
                 }
@@ -113,6 +122,14 @@ public class RoleMainUi implements IConfig {
         viewUiData.targetRpgPlayer = rpgPlayer;
         arcartXUI.open(rpgPlayer, ()->{
             sendRoleListPacket(rpgPlayer);
+            //如果玩家有使用的角色就把使用的角色发进去 否则发列表第一个
+            RoleData roleData = rpgPlayer.getUseRoleData();
+            if(roleData == null){
+                roleData = rpgPlayer.getRoleDataMap().entrySet().iterator().next().getValue();
+            }
+            if(roleData != null){
+                sendViewRolePacket(rpgPlayer, roleData.getRoleId());
+            }
         });
     }
 
@@ -125,7 +142,15 @@ public class RoleMainUi implements IConfig {
         ViewUiData viewUiData = getViewUiData(rpgPlayer);
         viewUiData.targetRpgPlayer = targetRpgPlayer;
         arcartXUI.open(rpgPlayer, ()->{
-
+            sendRoleListPacket(rpgPlayer);
+            //如果玩家有使用的角色就把使用的角色发进去 否则发列表第一个
+            RoleData roleData = targetRpgPlayer.getUseRoleData();
+            if(roleData == null){
+                roleData = targetRpgPlayer.getRoleDataMap().entrySet().iterator().next().getValue();
+            }
+            if(roleData != null){
+                sendViewRolePacket(rpgPlayer, roleData.getRoleId());
+            }
         });
     }
 
@@ -144,18 +169,18 @@ public class RoleMainUi implements IConfig {
         //当前查看的界面数据
         ViewUiData viewUiData = getViewUiData(rpgPlayer);
         List<Map<String, Object>> roleListDataPacket = new ArrayList<>();
-
-        //获取角色列表
-        List<RoleData> roleIdList = viewUiData.getTargetRpgPlayer().getRoleDataMap().values().stream().toList();
-        //遍历每个角色对象
-        roleIdList.forEach(roleData -> {
+        //获取角色列表 隐藏角色不显示
+        viewUiData.getTargetRpgPlayer().getRoleDataMap().values().stream().toList().forEach(roleData -> {
+            if(!rpgPlayer.isAdmin() && roleData.getHide()) {
+                return;
+            }
             Map<String, Object> roleDataPacket = new HashMap<>();
             roleDataPacket.put("id", roleData.getRoleId());
             roleDataPacket.put("level", roleData.getLevel());
             roleDataPacket.put("state", roleData.getRoleUnlockedState());
             roleListDataPacket.add(roleDataPacket);
-        });
 
+        });
         arcartXUI.sendPacket(rpgPlayer, "RoleListPacket", roleListDataPacket);
     }
 
@@ -217,12 +242,69 @@ public class RoleMainUi implements IConfig {
         roleData.getEquipSlotMap().forEach((slotId, equipSlotData) -> {
             String itemJson = ItemStack.CODEC.encode(Transcoder.JSON, equipSlotData.getItemStack()).orElseThrow().toString();
             equipSlotMap.put(slotId, itemJson);
-            Main.getLogger().debug(itemJson);
         });
         roleDataPacket.put("equipSlotMap", equipSlotMap);
         arcartXUI.sendPacket(rpgPlayer, "RoleDataPacket", roleDataPacket);
+
     }
 
+
+    /**
+     * 控制装备槽位交互
+     * @param rpgPlayer
+     * @param equipSlotId
+     */
+    private static void handleEquipSlot(RPGPlayer rpgPlayer, String equipSlotId){
+        //当前查看的界面数据
+        ViewUiData viewUiData = getViewUiData(rpgPlayer);
+        //当前没看角色 或者 你看的是其他玩家 那就不允许操作
+        if(viewUiData.roleId == null || rpgPlayer != viewUiData.targetRpgPlayer) return;
+        RoleData roleData = viewUiData.getTargetRpgPlayer().getRoleDataMap().get(viewUiData.roleId);
+        if(roleData == null) return;
+        if(roleData.getTestModel()) return;
+        EquipSlotData equipSlotData = roleData.getEquipSlotMap().get(equipSlotId);
+        if(equipSlotData == null) return;
+        //当前光标的物品
+        ItemStack cursorItem = rpgPlayer.getInventory().getCursorItem();
+        //两边都是空气
+        if(equipSlotData.getItemStack() == ItemStack.AIR && cursorItem == ItemStack.AIR) return;
+        //如果光标是空气则直接交换槽位物品
+        if(cursorItem == ItemStack.AIR){
+            //当前槽位的物品
+            ItemStack oldItem = equipSlotData.takeItemStack();
+            //将光标物品放入
+            equipSlotData.putItemStack(cursorItem);
+            //之前的物品设置到光标
+            rpgPlayer.getInventory().setCursorItem(oldItem);
+        }
+        //当前光标上的不是空气 则检查放入条件
+        if(equipSlotData.checkCondition(cursorItem, rpgPlayer)){
+            //当前槽位的物品
+            ItemStack oldItem = equipSlotData.takeItemStack();
+            //将光标物品放入
+            equipSlotData.putItemStack(cursorItem);
+            //之前的物品设置到光标
+            rpgPlayer.getInventory().setCursorItem(oldItem);
+        }
+        //发送更新物品的数据包 只更新有变动的槽位
+        arcartXUI.sendPacket(rpgPlayer, "RoleEquipSlotUpdatePacket", Map.of(equipSlotId, ItemStack.CODEC.encode(Transcoder.JSON, equipSlotData.getItemStack()).orElseThrow().toString()));
+    }
+
+
+    /**
+     * 切换成当前查看的角色
+     * @param rpgPlayer
+     */
+    private static void switchRole(RPGPlayer rpgPlayer){
+        //当前查看的界面数据
+        ViewUiData viewUiData = getViewUiData(rpgPlayer);
+        //当前没看角色 或者 你看的是其他玩家 那就不允许操作
+        if(viewUiData.roleId == null || rpgPlayer != viewUiData.targetRpgPlayer) return;
+        if(rpgPlayer.getUseRoleData() != null && rpgPlayer.getUseRoleData().getRoleId().equals(viewUiData.roleId)) return;
+        if(rpgPlayer.switchRole(viewUiData.roleId)){
+            arcartXUI.sendPacket(rpgPlayer, "RoleSwitchSuccess",List.of());
+        }
+    }
 
 
     /**
@@ -231,8 +313,9 @@ public class RoleMainUi implements IConfig {
      * @return
      */
     private static ViewUiData getViewUiData(RPGPlayer rpgPlayer){
-        return viewUiData.computeIfAbsent(rpgPlayer.getUuid(), k -> new ViewUiData(rpgPlayer));
+        return viewUiDataMap.computeIfAbsent(rpgPlayer.getUuid(), k -> new ViewUiData(rpgPlayer));
     }
+
 
 
 

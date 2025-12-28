@@ -1,8 +1,10 @@
 package org.qiuhua.troveserver.module.item;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.item.component.UseCooldown;
 import net.minestom.server.tag.Tag;
@@ -25,6 +27,11 @@ public class ItemManager {
     public final static Map<String, ItemCompileData> allItem = new HashMap<>();
 
     /**
+     * 填充用的透明物品
+     */
+    public static ItemStack fillItem;
+
+    /**
      * 属性模版
      */
     public final static Map<String, AttributeRandomTemplate> allAttributeRandomTemplate = new HashMap<>();
@@ -34,7 +41,18 @@ public class ItemManager {
         ConfigManager.loadConfig("item", "config", new ItemConfig());
         ConfigManager.loadConfig("item", "items", new ItemFileConfig());
         new ItemCommand();
-
+        ItemStack.Builder builder = ItemStack.builder(Material.PAPER);
+        //设置物品id
+        builder.setTag(Tag.String("ItemId"), "fillItem");
+        //设置最大堆叠
+        builder.maxStackSize(1);
+        //设置是否隐藏tip
+        setHideTooltip(builder, true);
+        //设置一个隐藏tip的nbt
+        setItemTag(builder, Map.of("TOOLTIP_DISPLAY", "true"));
+        fillItem = builder.build();
+        String itemJson = ItemStack.CODEC.encode(Transcoder.JSON, fillItem).orElseThrow().toString();
+        Main.getLogger().debug(itemJson);
 
     }
 
@@ -230,6 +248,7 @@ public class ItemManager {
         Map<String, String> replacements = new HashMap<>();
         //添加要替换的数据
         tagMap.forEach((key, value) -> {
+            if(key.equals("icon")) return;
             String newKey = "<" + key + ">";
             replacements.put(newKey, value.toString());
         });
@@ -248,6 +267,7 @@ public class ItemManager {
         Map<String, String> replacements = new HashMap<>();
         //添加要替换的数据
         tagMap.forEach((key, value) -> {
+            if(key.equals("icon")) return;
             String newKey = "<" + key + ">";
             replacements.put(newKey, value.toString());
         });
@@ -264,6 +284,7 @@ public class ItemManager {
      * @return
      */
     public static List<String> updateLoreAttributes(List<String> lore, List<AttributeNBTData> attributeNBTDataList){
+        lore = new ArrayList<>(lore);
         if(!attributeNBTDataList.isEmpty()){
             List<String> attributesList = new ArrayList<>();
             attributeNBTDataList.forEach(attributeNBTData -> {

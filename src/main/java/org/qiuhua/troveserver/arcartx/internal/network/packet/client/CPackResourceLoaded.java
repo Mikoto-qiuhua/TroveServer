@@ -20,8 +20,7 @@ public class CPackResourceLoaded implements PacketBase {
 
     /**
      * 是否异步执行
-     *
-     * @return false表示同步执行
+     * @return true表示异步执行
      */
     @Override
     public boolean isAsync() {

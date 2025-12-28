@@ -103,9 +103,6 @@ public class CPackConnection implements PacketBase {
         //获取服务器配置的CRC64列表
         List<Long> serverCrcList = Setting.crc64_list;
 
-        //检查玩家是否为管理员
-        boolean isAdmin = ServerConfig.adminList.contains(player.getUsername());
-
         //如果不允许部分匹配，且客户端CRC数量与服务器不匹配
         if (!Setting.crc64_allowPartial && clientCrc.size() != serverCrcList.size()) {
             return false;
@@ -128,7 +125,14 @@ public class CPackConnection implements PacketBase {
         return true;
     }
 
-
+    /**
+     * 是否异步执行
+     * @return true表示异步执行
+     */
+    @Override
+    public boolean isAsync() {
+        return false;
+    }
 
 
 

@@ -16,12 +16,15 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetCooldownPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.PotionEffect;
 import org.jetbrains.annotations.Nullable;
 import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.attribute.IAttribute;
 import org.qiuhua.troveserver.api.buff.IBuff;
 import org.qiuhua.troveserver.api.buff.IBuffData;
 import org.qiuhua.troveserver.config.ServerConfig;
+import org.qiuhua.troveserver.module.playermode.PlayerModeManager;
 import org.qiuhua.troveserver.module.role.RoleData;
 import org.qiuhua.troveserver.module.playermode.event.PlayerModeSwitchEvent;
 import org.qiuhua.troveserver.module.attribute.EntityAttributesData;
@@ -120,9 +123,22 @@ public class RPGPlayer extends Player implements IAttribute, IBuff {
         if(this.playerMode == PlayerMode.Battle){
             //切换到战斗模式
             setGameMode(GameMode.ADVENTURE);
+            //切换的模式是战斗模式 那就切换战斗物品栏 只有玩家是有模式的情况下才会进行记录 这里是为了避免第一次进服时玩家物品栏为空导致覆盖旧数据
+            PlayerModeManager.switchBattleInventory(this, playerMode != null);
+            //战斗模式下要给一个负数急迫药水 这样可以避免玩家挥手
+            Potion hastePotion = new Potion(
+                    PotionEffect.HASTE,     // 效果类型
+                    999999999,                  // 放大器（0=1级，1=2级）
+                    -1,       // 持续时间（刻）
+                    0    // 标志位：环境效果 + 粒子 + 图标
+            );
+            addEffect(hastePotion);
         }else {
             //切换到建造模式
             setGameMode(GameMode.SURVIVAL);
+            PlayerModeManager.switchBuildInventory(this);
+            //建造模式清理药水
+            removeEffect(PotionEffect.HASTE);
         }
         Main.getLogger().debug("{} 模式切换为 {}", getUsername(), this.playerMode);
     }
@@ -132,16 +148,16 @@ public class RPGPlayer extends Player implements IAttribute, IBuff {
      * 将玩家当前切换到其他角色
      * @param roleId
      */
-    public void switchRole(String roleId){
+    public boolean switchRole(String roleId){
         RoleData roleData = roleDataMap.get(roleId);
-        if(roleData == null) return;
+        if(roleData == null) return false;
         RoleSwitchPreEvent roleSwitchPreEvent = new RoleSwitchPreEvent(this, roleData);
         MinecraftServer.getGlobalEventHandler().call(roleSwitchPreEvent);
-        if(roleSwitchPreEvent.isCancelled()) return;
+        if(roleSwitchPreEvent.isCancelled()) return false;
         roleData = roleSwitchPreEvent.getRoleData();
         if(roleData.getRoleUnlockedState() == RoleUnlockedState.NotUnlocked){
             Main.getLogger().debug("{} 需要切换的角色 {} 未解锁", getUsername(), roleData.getRoleId());
-            return;
+            return false;
         }
         useRoleData = roleData;
         //移除原有基础的属性
@@ -157,7 +173,7 @@ public class RPGPlayer extends Player implements IAttribute, IBuff {
         RoleSwitchEvent roleSwitchEvent = new RoleSwitchEvent(this, roleData);
         MinecraftServer.getGlobalEventHandler().call(roleSwitchEvent);
         Main.getLogger().debug("{} 使用的角色切换为 {}", getUsername(), roleData.getRoleId());
-
+        return true;
     }
 
     /**

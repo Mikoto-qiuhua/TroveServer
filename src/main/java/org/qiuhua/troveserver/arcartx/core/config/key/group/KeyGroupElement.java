@@ -12,9 +12,6 @@ import java.util.List;
 
 public class KeyGroupElement {
 
-    public static final HashMap<String, KeyGroupElement> keyGroups = new HashMap<>();
-
-
     /**
      * 按键组合ID
      */

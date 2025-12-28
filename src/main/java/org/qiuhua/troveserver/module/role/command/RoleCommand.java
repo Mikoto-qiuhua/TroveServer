@@ -92,7 +92,7 @@ public class RoleCommand extends AbstractCommand {
                     String string = context.get(playerName);
                     RPGPlayer rpgPlayer1 = (RPGPlayer) MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(string);
                     if(rpgPlayer1 != null){
-
+                        RoleMainUi.open(rpgPlayer, rpgPlayer1);
                         Main.getLogger().info("{} 执行指令 /{}", rpgPlayer.getUsername(), context.getInput());
                     }
                 }

@@ -1,61 +1,11 @@
-#冲刺用的物品占位
-SprintItem:
-  material: "paper"
-  hide_tooltip: true
-  cooldownGroup: roleskill:sprint
+#切换角色后的生命值 百分比形式 1=100%
+SwitchHealthValue: 0.1
+#每次触发跳跃的间隔 毫秒
+JumpTime: 200
+#每次触发冲刺的间隔 毫秒
+SprintTime: 2000
+#每次触发冲刺的速度
+SprintSpeed: 300
+#每次触发跳跃的高度
+JumpSpeed: 10
 
-
-Role:
-  #切换角色后的生命值 百分比形式 1=100%
-  switchHealthValue: 0.1
-  #每次触发跳跃的间隔 毫秒
-  jumpTime: 200
-  #每次触发冲刺的间隔 毫秒
-  sprintTime: 2000
-  #每次触发冲刺的速度
-  sprintSpeed: 300
-  #每次触发跳跃的高度
-  jumpSpeed: 10
-
-#箱子Gui界面
-InventoryGui:
-  #填充界面所使用的
-  fillItem:
-    custom_name: "&f锁定槽位"
-    material: "barrier"
-    hide_tooltip: true
-    model_id: item:blank
-  #点击间隔
-  clickInterval: 300
-  title0: "&f"  #角色没使用的界面
-  title1: "&f"  #角色使用的界面
-  titleX: -88
-  infoX: -85
-
-  #角色列表的槽位  箱子界面第一个格子是0
-  roleListSlot: [ 1, 2, 3, 4, 5, 6, 7 ]
-  #翻页的设定
-  page:
-    #上一页
-    previousPage:
-      slot: 0
-      item:
-        custom_name: "&f上一页"
-        material: "paper"
-        model_id: item:left_arrow
-    #下一页
-    nextPage:
-      slot: 8
-      item:
-        custom_name: "&f下一页"
-        material: "paper"
-        model_id: item:right_arrow
-  #点击使用角色的槽位
-  useButton:
-    slot: [48, 49, 50]
-    item:
-      custom_name: "&f切换至该角色"
-      material: "barrier"
-      model_id: item:blank
-  #技能槽位
-  skillSlot: [22, 31, 40]

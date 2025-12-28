@@ -1,20 +1,10 @@
 package org.qiuhua.troveserver.module.playermode.listener;
 
-import net.minestom.server.entity.PlayerHand;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.PlayerInventory;
-import org.qiuhua.troveserver.Main;
-import org.qiuhua.troveserver.module.role.RoleData;
-import org.qiuhua.troveserver.module.role.config.RoleConfig;
-import org.qiuhua.troveserver.module.role.event.RolePutEquipEvent;
-import org.qiuhua.troveserver.module.role.event.RoleTakeEquipEvent;
-import org.qiuhua.troveserver.player.RPGPlayer;
-import org.qiuhua.troveserver.module.playermode.PlayerMode;
+import net.minestom.server.inventory.click.Click;
 import org.qiuhua.troveserver.module.playermode.PlayerModeManager;
 
 import java.util.List;
@@ -63,8 +53,14 @@ public class BattleModeListener {
         AbstractInventory abstractInventory = event.getInventory();
         if(abstractInventory instanceof PlayerInventory){
             int slot = event.getSlot();
+            //禁止使用快捷键移动物品
+            if(event.getClick() instanceof Click.HotbarSwap click){
+                if(disableClickSlotList.contains(click.hotbarSlot())){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
             if(disableClickSlotList.contains(slot)){
-                //Main.getLogger().debug("战斗模式下禁止交互此槽位");
                 event.setCancelled(true);
             }
         }

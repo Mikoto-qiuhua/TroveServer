@@ -6,15 +6,10 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import org.qiuhua.troveserver.player.RPGPlayer;
 
-public class LoginSuccessfulEvent implements PlayerEvent, CancellableEvent {
+public class LoginSuccessfulEvent implements PlayerEvent {
 
     @Getter
     private final RPGPlayer player;
-
-    @Setter
-    private boolean cancelled = false;
-
-    public boolean isCancelled() { return cancelled; }
 
     /**
      * 登入成功事件

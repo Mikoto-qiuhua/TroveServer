@@ -39,7 +39,7 @@ public class MobManager {
 
     public static void init(){
         //将节点添加进全局事件内
-        MinecraftServer.getGlobalEventHandler().addChild(mobNode.setPriority(1));
+        MinecraftServer.getGlobalEventHandler().addChild(mobNode);
         ConfigManager.loadConfig("mob", "mobs", new MobFileConfig());
         new MobCommand();
     }

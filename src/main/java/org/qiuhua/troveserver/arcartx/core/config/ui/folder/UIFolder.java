@@ -32,6 +32,8 @@ public class UIFolder implements IConfig {
         map.forEach((key, config) -> {
             if(!ArcartXUIRegistry.registeredUI.containsKey(key)){
                 ArcartXUIRegistry.register(key, config);
+            }else {
+                ArcartXUIRegistry.reload(key, config);
             }
         });
         Main.getLogger().info("ArcartX -> 加载UI {} 个", ArcartXUIRegistry.registeredUI.size());

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.arcartx.core.config.key.client.ClientKeyElement;
 import org.qiuhua.troveserver.arcartx.core.config.key.client.ClientKeyFolder;
 import org.qiuhua.troveserver.arcartx.event.client.ClientKeyPressEvent;
@@ -63,6 +64,15 @@ public class CPackClientKey implements PacketBase {
                 clientKeyElement.getCallBack().onRelease(player);
             }
         }
-
     }
+
+    /**
+     * 是否异步执行
+     * @return true表示异步执行
+     */
+    @Override
+    public boolean isAsync() {
+        return false;
+    }
+
 }

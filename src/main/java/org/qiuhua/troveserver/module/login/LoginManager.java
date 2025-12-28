@@ -20,18 +20,11 @@ import org.qiuhua.troveserver.utils.task.SchedulerManager;
 public class LoginManager {
 
 
-    /**
-     * 登入事件所使用的节点
-     */
-    public static final EventNode<PlayerEvent> loginNode = EventNode.type("Login_Node", EventFilter.PLAYER);
-
 
     public static void init(){
-        //将节点添加进全局事件内
-        MinecraftServer.getGlobalEventHandler().addChild(loginNode.setPriority(0));
         new LoginListener();
         //临时在这里实现登入成功后该干的事情
-        loginNode.addListener(LoginSuccessfulEvent.class, event -> {
+        MinecraftServer.getGlobalEventHandler().addListener(LoginSuccessfulEvent.class, event -> {
             RPGPlayer rpgPlayer = event.getPlayer();
             rpgPlayer.scheduler().scheduleNextTick(()->{
                 AttributeCompileGroup attributeCompileGroup = AttributeManager.getStringAttributeGroup(AttributeConfig.base_attribute_player);
@@ -46,9 +39,8 @@ public class LoginManager {
                     });
                     rpgPlayer.getRoleDataMap().get("战士").setRoleUnlockedState(RoleUnlockedState.Unlocked);
                     rpgPlayer.setPlayerMode(PlayerMode.Battle);
-                    rpgPlayer.switchRole("战士");
-                });
 
+                });
 
 
             });

@@ -15,4 +15,5 @@ public class ClientChannelEvent implements PlayerEvent {
     public ClientChannelEvent(Player player){
         this.player = player;
     }
+
 }

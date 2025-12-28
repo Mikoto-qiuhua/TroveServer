@@ -64,9 +64,8 @@ public class CPackSimpleKeyPress implements PacketBase {
 
 
     /**
-     * 判断是否为异步处理
-     *
-     * @return 返回false，表示同步处理
+     * 是否异步执行
+     * @return true表示异步执行
      */
     @Override
     public boolean isAsync() {

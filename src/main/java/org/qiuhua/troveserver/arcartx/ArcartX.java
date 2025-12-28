@@ -15,11 +15,18 @@ import org.qiuhua.troveserver.arcartx.core.config.key.simple.SimpleKeyFolder;
 import org.qiuhua.troveserver.arcartx.core.config.ui.folder.TipFolder;
 import org.qiuhua.troveserver.arcartx.core.config.ui.folder.UIFolder;
 import org.qiuhua.troveserver.arcartx.core.entity.ArcartXEntityManager;
+import org.qiuhua.troveserver.arcartx.core.ui.ArcartXUIRegistry;
+import org.qiuhua.troveserver.arcartx.core.ui.adapter.ArcartXUI;
+import org.qiuhua.troveserver.arcartx.core.ui.adapter.CallBackType;
 import org.qiuhua.troveserver.arcartx.event.client.ClientChannelEvent;
 import org.qiuhua.troveserver.arcartx.event.client.ClientInitializedEvent;
 import org.qiuhua.troveserver.arcartx.internal.network.packet.NetWorkManager;
 import org.qiuhua.troveserver.arcartx.internal.network.packet.NetworkMessageSender;
 import org.qiuhua.troveserver.config.ConfigManager;
+import org.qiuhua.troveserver.module.role.ui.RoleMainUi;
+import org.qiuhua.troveserver.player.RPGPlayer;
+
+import java.util.List;
 
 public class ArcartX {
 
@@ -66,11 +73,38 @@ public class ArcartX {
         });
         netWorkManager = new NetWorkManager();
 
+        MainMenuCallBack();
+
         Main.getLogger().info("ArcartX 已启用");
     }
 
 
+    /**
+     * 主菜单的界面回调注册
+     */
+    private static void MainMenuCallBack(){
+        ArcartXUI arcartXUI = ArcartXUIRegistry.get("MainMenu");
+        if(arcartXUI == null) return;
+        //回调函数 包处理
+        arcartXUI.registerCallBack(CallBackType.PACKET, callData -> {
+            //包头
+            String identifier = callData.getIdentifier();
+            //数据合集
+            List<String> data = callData.getData();
+            Player player = callData.getPlayer();
+            if (data.isEmpty()) return;
+            Main.getLogger().debug("收到包 {} | {}", identifier, data);
+            if (player instanceof RPGPlayer rpgPlayer) {
+                switch (identifier) {
+                    //
+                    case "openRole":
+                        RoleMainUi.open(rpgPlayer);
+                        break;
 
+                }
+            }
 
+        });
+    }
 
 }

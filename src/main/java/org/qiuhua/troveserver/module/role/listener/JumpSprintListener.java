@@ -14,6 +14,7 @@ import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.client.play.ClientInputPacket;
+import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.api.skill.AbstractSkillMechanic;
 import org.qiuhua.troveserver.arcartx.core.entity.ArcartXEntityManager;
 import org.qiuhua.troveserver.module.role.RoleManager;
@@ -67,7 +68,7 @@ public class JumpSprintListener {
                     RoleSprintEvent roleSprintEvent = new RoleSprintEvent(rpgPlayer);
                     MinecraftServer.getGlobalEventHandler().call(roleSprintEvent);
                     if(!roleSprintEvent.isCancelled()){
-                        //Main.getLogger().debug("{} 触发突进", rpgPlayer.getUsername());
+                        Main.getLogger().debug("{} 触发突进", rpgPlayer.getUsername());
                         rpgPlayer.setVelocity(getSprintSpeed(rpgPlayer));
                         jumpSprintData.setSprintTime(time);
                         //发送技能冷却数据包
@@ -97,7 +98,7 @@ public class JumpSprintListener {
                         }
                         rpgPlayer.setVelocity(vec);
                         rpgPlayer.playSound(Sound.sound(Key.key("entity.player.attack.nodamage"), Sound.Source.PLAYER, 1f, 1f));
-                        //Main.getLogger().debug("{} 跳跃次数 {}/{}", rpgPlayer.getUsername(), jumpData.getAmount(), jumpMax);
+                        Main.getLogger().debug("{} 跳跃次数 {}/{}", rpgPlayer.getUsername(), jumpSprintData.getJumpAmount(), jumpMax);
                     }
                 }else {
                     jumpSprintData.setJumpAmount(1);
@@ -106,7 +107,7 @@ public class JumpSprintListener {
                         rpgPlayer.setVelocity(new Vec(0, RoleConfig.jumpSpeed, 0));
                         rpgPlayer.playSound(Sound.sound(Key.key("entity.player.attack.nodamage"), Sound.Source.PLAYER, 1f, 1f));
                     }
-                    //Main.getLogger().debug("{} 第一次跳跃", rpgPlayer.getUsername());
+                    Main.getLogger().debug("{} 第一次跳跃", rpgPlayer.getUsername());
                 }
             }
 

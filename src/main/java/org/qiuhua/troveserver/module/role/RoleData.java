@@ -108,11 +108,7 @@ public class RoleData {
     @Getter
     private final List<RoleSkillData> roleSkillDataList = new ArrayList<>();
 
-    /**
-     * 这个角色使用的武器模型实体
-     */
-    @Getter
-    private final String armsModelId;
+
 
     public RoleData(String roleId, YamlConfiguration config, RPGPlayer rpgPlayer) {
         this.rpgPlayer = rpgPlayer;
@@ -123,7 +119,6 @@ public class RoleData {
         expTraceList.addAll(config.getStringList("Level.trace"));
         //初始化等级
         level = config.getInt("Level.base", 1);
-        armsModelId = config.getString("ArmsModelId", null);
 
         //加载RoleLevelExpData
         ConfigurationSection levelSection = config.getConfigurationSection("Level.key");
@@ -168,33 +163,22 @@ public class RoleData {
     }
 
 
-    /**
-     * 从槽位中获取武器物品
-     * @return
-     */
-    public ItemStack getArms(){
-        EquipSlotData equipSlotData = equipSlotMap.get("arms");
-        //没有这个槽位就返回空气
-        if(equipSlotData == null) return ItemStack.AIR;
-        return equipSlotData.getItemStack();
-    }
-
-
 
     /**
-     * 当前角色释放技能 触发器 -1=左键  其余为对应的快捷栏按键 正常情况只支持到0-3 0为右键技能
+     * 当前角色释放技能 -1是左键 其他的就是按键位顺序来
      * @param trigger
      * @return
      */
-    public void castSkill(int trigger){
-//        roleSkillDataList.forEach(roleSkillData -> {
-//            if(roleSkillData.getTrigger() == trigger){
-//                RoleCastSkillEvent roleCastSkillEvent = new RoleCastSkillEvent(rpgPlayer, this, roleSkillData.getSkillName());
-//                MinecraftServer.getGlobalEventHandler().call(roleCastSkillEvent);
-//                if(roleCastSkillEvent.isCancelled()) return;
-//                RoleManager.castSkill(rpgPlayer, roleCastSkillEvent.getSkillName(), roleSkillData.getMetaData(1));
-//            }
-//        });
+    public void castSkill(String trigger){
+        roleSkillDataList.forEach(roleSkillData -> {
+            if(roleSkillData.getTrigger() == null || roleSkillData.getTrigger().isEmpty()) return;
+            if(roleSkillData.getTrigger().equals(trigger)){
+                RoleCastSkillEvent roleCastSkillEvent = new RoleCastSkillEvent(rpgPlayer, this, roleSkillData.getSkillName());
+                MinecraftServer.getGlobalEventHandler().call(roleCastSkillEvent);
+                if(roleCastSkillEvent.isCancelled()) return;
+                RoleManager.castSkill(rpgPlayer, roleCastSkillEvent.getSkillName(), roleSkillData.getMetaData(1));
+            }
+        });
 
     }
 

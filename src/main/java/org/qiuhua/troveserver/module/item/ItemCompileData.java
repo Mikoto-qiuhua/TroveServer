@@ -87,8 +87,8 @@ public class ItemCompileData {
     public ItemCompileData(ConfigurationSection config, String itemId){
         this.config = config;
         this.itemId = itemId;
-        lore = StringUtils.colorCodeConversion(config.getStringList("lore"));
-        custom_name = StringUtils.colorCodeConversion(config.getString("custom_name", null));
+        lore = config.getStringList("lore");
+        custom_name = config.getString("custom_name", null);
         String strMaterial = "minecraft:" + config.getString("material", "air");
         material = Material.fromKey(strMaterial);
         max_stack_size = config.getInt("max_stack_size", 1);
