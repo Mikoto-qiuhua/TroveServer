@@ -61,6 +61,7 @@ public class NetWorkManager {
         this.registerPacket(MessageID.Client.KEY_GROUP_PRESS, CPackKeyGroupPress.class);
         this.registerPacket(MessageID.Client.SIMPLE_KEY_PRESS, CPackSimpleKeyPress.class);
         this.registerPacket(MessageID.Client.KEY_PRESS, CPackClientKey.class);
+        this.registerPacket(MessageID.Client.MOUSE_CLICK, CPacketMouseClick.class);
         //注册插件消息监听器
         MinecraftServer.getGlobalEventHandler().addListener(PlayerPluginMessageEvent.class, this::onPlayerPluginMessageEvent);
     }

@@ -28,8 +28,8 @@ public class LoginListener{
     public void onPlayerSpawnEvent(PlayerSpawnEvent event){
         RPGPlayer rpgPlayer = (RPGPlayer) event.getPlayer();
         if(event.isFirstSpawn()){
-//            rpgPlayer.setIsLogin(true);
-//            MinecraftServer.getGlobalEventHandler().call(new LoginSuccessfulEvent(rpgPlayer));
+            rpgPlayer.setIsLogin(true);
+            MinecraftServer.getGlobalEventHandler().call(new LoginSuccessfulEvent(rpgPlayer));
         }
     }
 

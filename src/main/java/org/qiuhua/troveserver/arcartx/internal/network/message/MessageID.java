@@ -49,7 +49,15 @@ public interface MessageID {
         /** 完成 */
         DONE(14),
         /** 方块模型 */
-        BLOCK_MODEL(15);
+        BLOCK_MODEL(15),
+        /** 鼠标点击 */
+        MOUSE_CLICK(16),
+        /** 文件列表 */
+        FILE_LIST(17),
+        /** 下载内容 */
+        DOWNLOAD_DONE(18),
+        /** UI数据 */
+        UI_DATA(19);
 
         private final int id;
 
@@ -168,7 +176,11 @@ public interface MessageID {
         /** 移除世界纹理 */
         WORLD_TEXTURE_REMOVE(52),
         /** 打开编辑器 */
-        OPEN_EDITOR(53);
+        OPEN_EDITOR(53),
+        /** 文件列表 */
+        FILE_LIST(54),
+        /** 隐藏命中框 */
+        HIDE_HIT_BOX(55);
 
         private final int id;
 
