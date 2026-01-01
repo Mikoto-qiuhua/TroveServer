@@ -5,6 +5,7 @@ import org.qiuhua.troveserver.arcartx.core.config.Setting;
 import org.qiuhua.troveserver.arcartx.core.config.camera.CameraElement;
 import org.qiuhua.troveserver.arcartx.core.config.camera.CameraPresetFolder;
 import org.qiuhua.troveserver.arcartx.core.config.camera.CameraSetting;
+import org.qiuhua.troveserver.arcartx.core.config.font.FontIcon;
 import org.qiuhua.troveserver.arcartx.core.config.font.FontIconFolder;
 import org.qiuhua.troveserver.arcartx.core.config.key.client.ClientKeyFolder;
 import org.qiuhua.troveserver.arcartx.core.config.key.group.KeyGroupFolder;
@@ -32,7 +33,7 @@ public class SPackSettings implements ServerPacketBase{
      * 字体图标
      */
     @SerializedName(value="fontIconSetting")
-    private final Map<Integer, String> fontIconSetting = new HashMap<>(FontIconFolder.fontIcons);
+    private final Map<Integer, FontIcon> fontIconSetting = new HashMap<>(FontIconFolder.fontIcons);
 
     /**
      * 客户端按键

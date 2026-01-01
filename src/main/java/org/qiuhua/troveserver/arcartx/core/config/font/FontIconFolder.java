@@ -12,7 +12,7 @@ import java.util.Map;
 public class FontIconFolder implements IConfig {
 
 
-    public static final HashMap<Integer, String> fontIcons = new HashMap<>();
+    public static final HashMap<Integer, FontIcon> fontIcons = new HashMap<>();
 
     /**
      * 重载配置
@@ -36,7 +36,8 @@ public class FontIconFolder implements IConfig {
             for(String key : config.getKeys(false)){
                 int id = config.getInt(key + ".id");
                 String path = config.getString(key + ".path");
-                fontIcons.put(id, path);
+                double proportion = config.getDouble(key + ".proportion", 0.8);
+                fontIcons.put(id, new FontIcon(id, proportion, path));
             }
         });
         Main.getLogger().info("ArcartX -> 加载FontIcons {} 个", fontIcons.size());

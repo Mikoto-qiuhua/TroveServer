@@ -1,0 +1,870 @@
+ui:
+  #该配置是否是hud
+  isHud: "false"
+  #该UI打开的时候隐藏那些HUD​
+  hide: []
+  #点击或者键盘输入事件是否需要传递给HUD​
+  transfer: "false"
+  #物品悬浮时的尺寸​
+  itemSize: "66/self['自适应背景'].height*Screen.getHeight()"
+  #是否点击穿透​
+  through: "false"
+  #按下esc是否关闭UI​
+  escClose: "true"
+  #死亡关闭UI 如非重生页面请勿打开​
+  closeDied: "true"
+  #是否显示​
+  show: "true"
+  #是否在这个UI中启用JEI​
+  jei: "false"
+  #覆盖原版UI 这个原版UI的名字可以在客户端日志输出中看到​
+  match:
+  #是否渲染背景
+  background: true
+  #动作触发器​
+  action:
+
+
+    open: |-
+      val.自适应背景['横栏'].y = Q2(-80, 0, 2, 500)
+      val.角色名称布局.y = Q2(-80, 0, 2, 500)
+      val.自适应背景['横栏'].alpha = Lerp(0, 1, 500)
+      var.背包状态 = false
+
+      var.打开背包 = -> {
+        var.背包透明度 = Lerp(0, 1, 500)
+        val.物品槽位画布.x = Q2(-50, -550, 2, 500)
+        val.背包画布.x = Q2(0, -500, 2, 500)
+        val.自适应背景['使用按钮'].y = Q2(-100, 0, 2, 500)
+        val.背包画布.visible = true
+        var.背包状态 = true
+        val.物品槽位画布['交互背景'].tip = "点击关闭背包"
+      }
+
+      var.关闭背包 = -> {
+        var.背包透明度 = Lerp(1, 0, 500)
+        val.物品槽位画布.x = Q2(-550, -50, 2, 500)
+        val.背包画布.x = Q2(-500, 0, 2, 500)
+        val.自适应背景['使用按钮'].y = Q2(0, -100, 2, 500)
+        val.物品槽位画布['交互背景'].tip = "点击开启背包"
+        var.背包状态 = false
+        async{
+          Thread.sleep(500)
+          if(!var.背包状态){
+            val.背包画布.visible = false
+          }
+        }
+      }
+
+
+
+      var.动画开始 = -> {
+        val.自适应背景['使用按钮'].y = Q2(0, -100, 2, 500)
+        val.角色信息画布.x = Q2(-50, 45, 2, 500)
+        val.物品槽位画布.x = Q2(45, -50, 2, 500)
+        var.全局透明度 = Lerp(0, 1, 500)
+      }
+
+      var.更新装备槽位 = -> {
+        槽位id = args[0]
+        物品json = args[1]
+        槽位组件 = val.装备布局[槽位id]
+        if(槽位组件 != null){
+          槽位组件.setItemIcon(物品json)
+          Shimmer.println(物品json)
+        }
+        槽位组件 = val.烈焰宝石布局[槽位id]
+        if(槽位组件 != null){
+          槽位组件.setItemIcon(物品json)
+        }
+        槽位组件 = val.苍穹宝石布局[槽位id]
+        if(槽位组件 != null){
+          槽位组件.setItemIcon(物品json)
+        }
+        槽位组件 = val.潮汐宝石布局[槽位id]
+        if(槽位组件 != null){
+          槽位组件.setItemIcon(物品json)
+        }
+        槽位组件 = val.药水布局[槽位id]
+        if(槽位组件 != null){
+          槽位组件.setItemIcon(物品json)
+        }
+      
+      }
+
+  packetHandler:
+    RoleEquipSlotUpdatePacket: |-
+      //Message.chat(packet)
+      for(槽位id, 物品json in packet){
+        var.更新装备槽位(槽位id, 物品json)
+      }
+    RoleSwitchSuccess: |-
+      val.自适应背景['使用按钮'].visible = false
+
+    RoleListPacket: |-
+      //Message.chat(packet)
+      for(角色数据 in packet){
+        button = val.角色名称布局['角色名称模版'].copy(角色数据['id'])
+        button.texts = 角色数据['id']
+        button.roleId = 角色数据['id']
+        if(角色数据['state'] == "Unlocked"){
+          button.tip = "Lv.{角色数据['level'].round()}"
+        }else{
+          button.tip = "未解锁"
+        }
+        button.visible = true
+        button.alpha = Lerp(0, 1, 500)
+      }
+    RoleDataPacket: |-
+      //Message.chat(packet)
+      var.动画开始
+      if(var.背包状态){
+        var.关闭背包
+      }
+      val.角色信息画布['角色名称'].texts = packet['id']
+      val.角色信息画布['角色等级'].texts = "Lv.{packet['level'].round()}"
+      val.角色信息画布['角色经验'].texts = "EXP {packet['exp'].round()}/{packet['expMax'].round()}"
+      if(packet['isUse']){
+        val.自适应背景['使用按钮'].visible = false
+      }else{
+        val.自适应背景['使用按钮'].visible = true
+      }
+      if(packet['state'] == "Unlocked"){
+        val.自适应背景['使用按钮'].texts = "使用角色"
+        val.自适应背景['使用按钮'].tip = "使用角色"
+      }else{
+        val.自适应背景['使用按钮'].texts = "未解锁"
+        val.自适应背景['使用按钮'].tip = "未解锁"
+      }
+      属性 = packet['attributes']
+      var.物理伤害 = 属性['物理伤害']
+      技能 = packet['skills']
+      val.技能布局.clear()
+      for(技能数据 in 技能){
+        skill = val.技能布局.create('技能图标模版', 技能数据['skillName'])
+        skill.normal = 技能数据['packet']['icon']
+        skill.tip = 技能数据['packet']['tip']
+      }
+      装备槽位数据 = packet['equipSlotMap']
+      //Message.chat(装备槽位数据)
+      for(槽位id, 物品json in 装备槽位数据){
+        var.更新装备槽位(槽位id, 物品json)
+      }
+
+
+
+
+
+
+
+
+template:
+  技能图标模版:
+    type: "Texture"
+    attribute:
+      width: "32"
+      height: "32"
+      scale: "3"
+      alpha: var.全局透明度
+      visible: true
+
+
+controls:
+  自适应背景:
+    type: "adaptive"
+    val: 自适应背景
+    attribute:
+      point: "~middle_center"
+      width: "1920"
+      height: "1080"
+    children:
+
+
+      使用按钮:
+        type: "Texture"
+        attribute:
+          point: "~bottom_center"
+          x: "0"
+          y: "-100"
+          fontSize: "50"
+          width: "348"
+          height: "66"
+          normal: "~ui/role/use_button_normal.png"
+          hover: "~ui/role/use_button_hove.png"
+          alpha: var.全局透明度
+        action:
+          enter: |-
+            self.middleScale = Q2(1, 1.1, 2, 200)
+          leave: |-
+            self.middleScale = Q2(1.1, 1, 2, 200)
+          click: |-
+            Packet.send("switchRole", "") 
+
+      横栏:
+        type: "Texture"
+        attribute:
+          point: "~top_center"
+          x: "0"
+          y: "-80"
+          width: Display.width()*2
+          height: "80"
+          normal: "~34,42,60"
+          alpha: 0
+      角色名称布局:
+        val: 角色名称布局
+        type: "HStack"
+        attribute:
+          point: "~top_center"
+          x: "0"
+          y: "-80"
+          spaceBetween: "0"
+        children:
+          角色名称模版:
+            type: "Texture"
+            attribute:
+              width: "150"
+              height: "80"
+              fontSize: "60"
+              shadow: true
+              visible: false
+              hover: "~122,131,153"
+              alpha: 0
+            action:
+              click: |-
+                Packet.send("viewRole", self.roleId)
+
+
+      背包画布:
+        val: 背包画布
+        type: "Canvas"
+        attribute:
+          point: "~top_right"
+          x: "-510"
+          y: "0"
+          visible: true
+        children:
+          背景:
+            type: "Texture"
+            attribute:
+              width: "502"
+              height: "1080"
+              x: "0"
+              y: "0"
+              alpha: var.背包透明度
+              normal: "~ui/backpack/main.png"
+            children:
+              背包网格1:
+                type: "VStack"
+                attribute:
+                  x: "370"
+                  y: "27"
+                  spaceBetween: "20"
+                action:
+                  create: |-
+                    for(i in range(1,8)){
+                      slot = self['背包槽位0'].copy('背包槽位' + i)
+                      slot.id = 9 + a
+                    }
+                children:
+                  背包槽位0:
+                    type: "slot"
+                    attribute:
+                      width: "96"
+                      height: "96"
+                      normal: "~ui/backpack/slot_normal.png"
+                      hover: "~ui/backpack/slot_hover.png"
+                      slotType: "~Backpack"
+                      itemScale: 0.8
+                      id: 9
+                      alpha: var.背包透明度
+                    action:
+                      enter: |-
+                        self.itemScale = Q2(0.8, 0.9, 2, 200)
+                      leave: |-
+                        self.itemScale = Q2(0.9, 0.8, 2, 200)
+              背包网格2:
+                type: "VStack"
+                attribute:
+                  x: "260"
+                  y: "27"
+                  spaceBetween: "20"
+                action:
+                  create: |-
+                    for(i in range(1,8)){
+                      slot = self['背包槽位0'].copy('背包槽位' + i)
+                      slot.id = 10 + i
+                    }
+                children:
+                  背包槽位0:
+                    type: "slot"
+                    attribute:
+                      width: "96"
+                      height: "96"
+                      normal: "~ui/backpack/slot_normal.png"
+                      hover: "~ui/backpack/slot_hover.png"
+                      slotType: "~Backpack"
+                      itemScale: 0.8
+                      id: 10
+                      alpha: var.背包透明度
+                    action:
+                      enter: |-
+                        self.itemScale = Q2(0.8, 0.9, 2, 200)
+                      leave: |-
+                        self.itemScale = Q2(0.9, 0.8, 2, 200)
+              背包网格3:
+                type: "VStack"
+                attribute:
+                  x: "150"
+                  y: "27"
+                  spaceBetween: "20"
+                action:
+                  create: |-
+                    for(i in range(1,8)){
+                      slot = self['背包槽位0'].copy('背包槽位' + i)
+                      slot.id = 18 + i
+                    }
+                children:
+                  背包槽位0:
+                    type: "slot"
+                    attribute:
+                      width: "96"
+                      height: "96"
+                      normal: "~ui/backpack/slot_normal.png"
+                      hover: "~ui/backpack/slot_hover.png"
+                      slotType: "~Backpack"
+                      itemScale: 0.8
+                      id: 18
+                      alpha: var.背包透明度
+                    action:
+                      enter: |-
+                        self.itemScale = Q2(0.8, 0.9, 2, 200)
+                      leave: |-
+                        self.itemScale = Q2(0.9, 0.8, 2, 200)
+              手持网格:
+                type: "VStack"
+                attribute:
+                  x: "30"
+                  y: "27"
+                  spaceBetween: "20"
+                action:
+                  create: |-
+                    for(i in range(1,8)){
+                      slot = self['背包槽位0'].copy('背包槽位' + i)
+                      slot.id = 36 + i
+                    }
+                children:
+                  背包槽位0:
+                    type: "slot"
+                    attribute:
+                      width: "96"
+                      height: "96"
+                      normal: "~ui/backpack/slot_normal.png"
+                      hover: "~ui/backpack/slot_hover.png"
+                      slotType: "~Backpack"
+                      itemScale: 0.8
+                      id: 36
+                      alpha: var.背包透明度
+                    action:
+                      enter: |-
+                        self.itemScale = Q2(0.8, 0.9, 2, 200)
+                      leave: |-
+                        self.itemScale = Q2(0.9, 0.8, 2, 200)  
+
+
+      物品槽位画布:
+        val: 物品槽位画布
+        type: "Canvas"
+        attribute:
+          point: "~top_right"
+          x: "-30"
+          y: "0"
+        children:
+          交互背景:
+            type: "Texture"
+            attribute:
+              width: "502"
+              height: "850"
+              x: "-460"
+              y: "150"
+              tip: "~点击打开背包"
+              #normal: "~ui/backpack/main.png"
+            action:
+              click: |-
+                if(var.背包状态){
+                  var.关闭背包
+                }else{
+                  var.打开背包
+                }
+
+          装备:
+            type: "Text"
+            attribute:
+              x: "-55"
+              y: "165"
+              texts: "~装备"
+              fontSize: "60"
+              shadow: true
+              alpha: var.全局透明度
+          装备布局:
+            val: 装备布局
+            type: "HStack"
+            attribute:
+              x: "-300"
+              y: "210"
+              spaceBetween: "15"
+            children:
+              帽子:
+                type: "slot"
+                attribute:
+                  tip: "~帽子"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "帽子")
+
+              上衣:
+                type: "slot"
+                attribute:
+                  tip: "~上衣"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "上衣")
+              武器:
+                type: "slot"
+                attribute:
+                  tip: "~武器"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "武器")
+          宝石:
+            type: "Text"
+            attribute:
+              x: "-55"
+              y: "360"
+              texts: "~宝石"
+              fontSize: "60"
+              shadow: true
+              alpha: var.全局透明度
+          烈焰宝石布局:
+            val: 烈焰宝石布局
+            type: "HStack"
+            attribute:
+              x: "-425"
+              y: "405"
+              spaceBetween: "15"
+            children:
+              大型烈焰宝石:
+                type: "slot"
+                attribute:
+                  tip: "~大型烈焰宝石"
+                  width: "110"
+                  height: "110"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "大型烈焰宝石")
+              烈焰宝石1:
+                type: "slot"
+                attribute:
+                  tip: "~烈焰宝石"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "烈焰宝石1")
+              烈焰宝石2:
+                type: "slot"
+                attribute:
+                  tip: "~烈焰宝石"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "烈焰宝石2")
+              烈焰宝石3:
+                type: "slot"
+                attribute:
+                  tip: "~烈焰宝石"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "烈焰宝石3")
+          苍穹宝石布局:
+            val: 苍穹宝石布局
+            type: "HStack"
+            attribute:
+              x: "-425"
+              y: "530"
+              spaceBetween: "15"
+            children:
+              大型苍穹宝石:
+                type: "slot"
+                attribute:
+                  tip: "~大型苍穹宝石"
+                  width: "110"
+                  height: "110"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "大型苍穹宝石")
+              苍穹宝石1:
+                type: "slot"
+                attribute:
+                  tip: "~苍穹宝石"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "苍穹宝石1")
+              苍穹宝石2:
+                type: "slot"
+                attribute:
+                  tip: "~苍穹宝石"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "苍穹宝石2")
+              苍穹宝石3:
+                type: "slot"
+                attribute:
+                  tip: "~苍穹宝石"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "苍穹宝石3")
+          潮汐宝石布局:
+            val: 潮汐宝石布局
+            type: "HStack"
+            attribute:
+              x: "-425"
+              y: "655"
+              spaceBetween: "15"
+            children:
+              大型潮汐宝石:
+                type: "slot"
+                attribute:
+                  tip: "~大型潮汐宝石"
+                  width: "110"
+                  height: "110"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "大型潮汐宝石")
+              潮汐宝石1:
+                type: "slot"
+                attribute:
+                  tip: "~潮汐宝石"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "潮汐宝石1")
+              潮汐宝石2:
+                type: "slot"
+                attribute:
+                  tip: "~潮汐宝石"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "潮汐宝石2")
+              潮汐宝石3:
+                type: "slot"
+                attribute:
+                  tip: "~潮汐宝石"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "潮汐宝石3")
+          药水:
+            type: "Text"
+            attribute:
+              x: "-55"
+              y: "830"
+              texts: "~药水"
+              fontSize: "60"
+              shadow: true
+              alpha: var.全局透明度
+          药水布局:
+            val: 药水布局
+            type: "HStack"
+            attribute:
+              x: "-280"
+              y: "875"
+              spaceBetween: "15"
+            children:
+              药水效果1:
+                type: "slot"
+                attribute:
+                  tip: "~药水效果"
+                  width: "80"
+                  height: "80"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "药水效果1")
+              药水:
+                type: "slot"
+                attribute:
+                  tip: "~药水"
+                  width: "90"
+                  height: "90"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "药水")
+              药水效果2:
+                type: "slot"
+                attribute:
+                  tip: "~药水效果"
+                  width: "80"
+                  height: "80"
+                  normal: "~ui/role/slot_normal.png"
+                  hover: "~ui/role/slot_hover.png"
+                  slotType: "~Icon"
+                  itemScale: "0.8"
+                  alpha: var.全局透明度
+                action:
+                  enter: |-
+                    self.itemScale = Q2(0.8, 0.9, 2, 200)
+                  leave: |-
+                    self.itemScale = Q2(0.9, 0.8, 2, 200)
+                  click: |-
+                    Packet.send("handleEquipSlot", "药水效果2")
+
+      角色信息画布:
+        type: "Canvas"
+        val: 角色信息画布
+        attribute:
+          point: "~top_left"
+          x: "-50"
+          y: "0"
+        children:
+          角色名称:
+            type: "Text"
+            attribute:
+              x: "-4"
+              y: "180"
+              fontSize: "150"
+              shadow: true
+              alpha: var.全局透明度
+          角色等级:
+            type: "Text"
+            attribute:
+              x: "0"
+              y: "270"
+              fontSize: "80"
+              shadow: true
+              alpha: var.全局透明度
+          角色经验:
+            type: "Text"
+            attribute:
+              x: "0"
+              y: "310"
+              fontSize: "80"
+              shadow: true
+              alpha: var.全局透明度
+          角色属性:
+            type: "Text"
+            attribute:
+              x: "0"
+              y: "390"
+              texts: "~角色属性"
+              fontSize: "60"
+              shadow: true
+              alpha: var.全局透明度
+          属性布局:
+            type: "VStack"
+            attribute:
+              x: "3"
+              y: "430"
+              spaceBetween: "2"
+            children:
+              物理伤害:
+                type: "Text"
+                attribute:
+                  texts: "~物理伤害: {var.物理伤害}"
+                  fontSize: "50"
+                  shadow: true
+                  alpha: var.全局透明度
+              生命值:
+                type: "Text"
+                attribute:
+                  texts: "~生命值: {var.生命值}"
+                  fontSize: "50"
+                  shadow: true
+                  alpha: var.全局透明度
+          技能:
+            type: "Text"
+            attribute:
+              x: "0"
+              y: "830"
+              texts: "~技能"
+              fontSize: "60"
+              shadow: true
+              alpha: var.全局透明度
+          技能布局:
+            val: 技能布局
+            type: "HStack"
+            attribute:
+              x: "-10"
+              y: "875"
+              spaceBetween: "10"
+            children:

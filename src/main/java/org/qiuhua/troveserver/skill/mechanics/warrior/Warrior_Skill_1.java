@@ -20,8 +20,8 @@ import org.qiuhua.troveserver.skill.targeter.PosTargetSelector;
 import org.qiuhua.troveserver.utils.ItemAnimationController;
 
 /**
- * 骑士职业的1技能
- * 朝前方砸一下带击退
+ * 战士职业的1技能
+ * 战士方砸一下带击退
  *
  */
 public class Warrior_Skill_1 extends AbstractSkillMechanic {

@@ -2,6 +2,7 @@ package org.qiuhua.troveserver.arcartx.internal.network.packet.client;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import org.qiuhua.troveserver.Main;
 import org.qiuhua.troveserver.arcartx.event.client.ClientInitializedEvent;
 import org.qiuhua.troveserver.arcartx.internal.network.packet.PacketBase;
 

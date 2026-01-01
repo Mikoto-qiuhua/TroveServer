@@ -48,8 +48,6 @@ public class ItemManager {
         builder.maxStackSize(1);
         //设置是否隐藏tip
         setHideTooltip(builder, true);
-        //设置一个隐藏tip的nbt
-        setItemTag(builder, Map.of("TOOLTIP_DISPLAY", "true"));
         fillItem = builder.build();
         String itemJson = ItemStack.CODEC.encode(Transcoder.JSON, fillItem).orElseThrow().toString();
         Main.getLogger().debug(itemJson);
@@ -210,12 +208,15 @@ public class ItemManager {
 
     /**
      * 设置是否隐藏tip
+     * 顺手加上一个自定义标签用于给ax使用s
      * @param builder
      * @param b
      * @return
      */
     public static ItemStack.Builder setHideTooltip(ItemStack.Builder builder, boolean b){
         builder.set(DataComponents.TOOLTIP_DISPLAY, new TooltipDisplay(b, Set.of()));
+        //设置一个隐藏tip的nbt
+        setItemTag(builder, Map.of("TOOLTIP_DISPLAY", "true"));
         return builder;
     }
 

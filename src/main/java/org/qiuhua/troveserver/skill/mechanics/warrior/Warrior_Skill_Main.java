@@ -21,7 +21,7 @@ import org.qiuhua.troveserver.skill.targeter.PosTargetSelector;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 骑士职业的左键攻击技能
+ * 战士职业的左键攻击技能
  * 触发挥刀
  * 第一次挥刀为右手
  * 两次触发的间隔小于3s 则左右互换挥刀

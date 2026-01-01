@@ -3,11 +3,11 @@ package org.qiuhua.troveserver.utils;
 import lombok.Getter;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.tag.Tag;
 import org.qiuhua.troveserver.module.item.ItemManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class ItemAnimationController {
     private final List<ItemStack> frames = new ArrayList<>();

@@ -18,7 +18,9 @@ import org.qiuhua.troveserver.player.RPGPlayer;
 
 import javax.crypto.SecretKey;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CPackConnection implements PacketBase {
 
@@ -39,7 +41,9 @@ public class CPackConnection implements PacketBase {
     @Setter
     private List<String> code = new ArrayList<>();
 
-
+    @SerializedName(value="resource")
+    @Getter
+    private final Map<String, String> resource = new HashMap<>();
 
     /**
      * 处理数据包的核心方法，由具体实现类实现

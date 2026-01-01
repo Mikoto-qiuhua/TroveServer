@@ -1,18 +1,18 @@
-
-#物品图标
-Icon:
-  custom_name: "&f左键攻击" #展示名称
-  material: "paper" #物品材质
-  model_id:
-
-SkillClassId: "Warrior_attack_Main"
+#这个技能的自定义数据包 用于描述等功能 全解析属性占位符 支持list
+Packet:
+  icon: "role_skill_icon/leftclick_attack_icon.png"
+  tip:
+    - "技能1"
+    - "冷却时间: <冷却时间>"
 
 
 
+
+SkillClassId: "warrior_skill_main"
 
 #技能默认元数据
 #元数据中的 <>将会解析成属性值
-#只有get整个元数据时才会解析 如果你从原始副本中拿则返回字符串
+#需要手动解析
 Meta:
   #伤害倍率
   damage: "<攻击倍率>"
@@ -20,6 +20,7 @@ Meta:
   cooldown: "<冷却时间>"
 
 #技能的属性值
+#等级还未引入
 Attributes:
   #属性key 这里可以随意定 不同于角色属性
   攻击倍率:

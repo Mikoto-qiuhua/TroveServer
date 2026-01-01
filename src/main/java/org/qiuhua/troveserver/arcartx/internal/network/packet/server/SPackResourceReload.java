@@ -26,7 +26,15 @@ public class SPackResourceReload implements ServerPacketBase {
      * Value: 资源密码
      */
     @SerializedName("initCode")
+    @Getter
     private final Map<String, String> passwords = new HashMap<>();
+
+
+    @SerializedName(value="files")
+    @Getter
+    private final Map<String, String> files = new HashMap<>();
+
+
 
     /**
      * 构造函数
