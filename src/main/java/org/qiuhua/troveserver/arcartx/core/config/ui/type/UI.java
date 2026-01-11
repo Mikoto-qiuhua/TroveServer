@@ -3,6 +3,7 @@ package org.qiuhua.troveserver.arcartx.core.config.ui.type;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import org.qiuhua.troveserver.arcartx.core.config.ui.Control;
+import org.qiuhua.troveserver.arcartx.core.config.ui.task.UITask;
 import org.qiuhua.troveserver.arcartx.core.ui.adapter.ArcartXUI;
 import org.qiuhua.troveserver.arcartx.core.ui.adapter.CallBackType;
 import org.qiuhua.troveserver.arcartx.util.collections.UICallBack;
@@ -31,6 +32,10 @@ public class UI implements ArcartXUI {
     @Getter
     private final LinkedHashMap<String, Control> template = new LinkedHashMap<>();
 
+    @SerializedName(value="tasks")
+    @Getter
+    private final LinkedHashMap<String, UITask> task = new LinkedHashMap<>();
+
     @Getter
     @SerializedName(value="id")
     private final String id;
@@ -51,7 +56,7 @@ public class UI implements ArcartXUI {
             }
         }
 
-        //ui模版解析 不知道有什么用 反正没看见wiki上有这个功能
+        //ui模版解析
         ConfigurationSection templatesSection = config.getConfigurationSection("template");
         if(templatesSection != null){
             for(String templateKey : templatesSection.getKeys(false)){
@@ -63,6 +68,21 @@ public class UI implements ArcartXUI {
 
             }
         }
+
+        //ui定时任务解析
+        ConfigurationSection tasksSection = config.getConfigurationSection("tasks");
+        if(tasksSection != null){
+            for(String taskKey : tasksSection.getKeys(false)){
+                ConfigurationSection taskSection = tasksSection.getConfigurationSection(taskKey);
+                if(taskSection != null){
+                    UITask uiTask = new UITask(taskSection);
+                    task.put(taskKey, uiTask);
+                }
+
+            }
+        }
+
+
     }
 
 

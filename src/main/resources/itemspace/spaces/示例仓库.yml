@@ -1,0 +1,20 @@
+#可以放入的物品条件列表
+#允许玩家自主启用或关闭某一个放入条件
+ItemConditionList:
+  条件1: |-
+    item.hasTag('Equip', '单手剑')
+
+#是否自动拾取物品
+AutoPickUp:
+  #是否启用
+  enable: true
+  #切换拾取的条件
+  condition:
+
+#仓库的大小 -1=无限
+SizeMax: -1
+#默认解锁的大小
+UnlockSize: -1
+
+
+

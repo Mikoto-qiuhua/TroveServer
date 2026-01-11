@@ -24,6 +24,7 @@ import org.qiuhua.troveserver.api.attribute.IAttribute;
 import org.qiuhua.troveserver.api.buff.IBuff;
 import org.qiuhua.troveserver.api.buff.IBuffData;
 import org.qiuhua.troveserver.config.ServerConfig;
+import org.qiuhua.troveserver.module.space.ItemSpaceData;
 import org.qiuhua.troveserver.module.playermode.PlayerModeManager;
 import org.qiuhua.troveserver.module.role.RoleData;
 import org.qiuhua.troveserver.module.playermode.event.PlayerModeSwitchEvent;
@@ -34,10 +35,7 @@ import org.qiuhua.troveserver.module.role.config.RoleConfig;
 import org.qiuhua.troveserver.module.role.event.RoleSwitchEvent;
 import org.qiuhua.troveserver.module.role.event.RoleSwitchPreEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RPGPlayer extends Player implements IAttribute, IBuff {
@@ -93,6 +91,14 @@ public class RPGPlayer extends Player implements IAttribute, IBuff {
      */
     @Getter
     private final ConcurrentHashMap<String, IBuffData> buffMap = new ConcurrentHashMap<>();
+
+    /**
+     * 玩家所持有的物品空间
+     */
+    @Getter
+    private final LinkedHashMap<UUID, ItemSpaceData> itemSpaceMap = new LinkedHashMap<>();
+
+
 
 
     public RPGPlayer(PlayerConnection playerConnection, GameProfile gameProfile) {

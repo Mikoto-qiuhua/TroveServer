@@ -2,9 +2,7 @@ package org.qiuhua.troveserver.module.login;
 
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventNode;
-import net.minestom.server.event.trait.PlayerEvent;
+import org.qiuhua.troveserver.module.space.ItemSpaceManager;
 import org.qiuhua.troveserver.module.playermode.PlayerMode;
 import org.qiuhua.troveserver.module.role.RoleUnlockedState;
 import org.qiuhua.troveserver.player.RPGPlayer;
@@ -39,7 +37,8 @@ public class LoginManager {
                     });
                     rpgPlayer.getRoleDataMap().get("战士").setRoleUnlockedState(RoleUnlockedState.Unlocked);
                     rpgPlayer.setPlayerMode(PlayerMode.Battle);
-
+                    //给玩家一个测试仓库
+                    ItemSpaceManager.createItemSpace(rpgPlayer, "示例仓库");
                 });
 
 

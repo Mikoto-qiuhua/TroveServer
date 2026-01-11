@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "8.3.0"
+    id("com.gradleup.shadow") version "9.3.0"
 }
 
 group = "org.qiuhua.troveserver"
@@ -14,7 +14,6 @@ repositories {
     maven("https://mvn.everbuild.org/public/")
     maven("https://repo.hypera.dev/snapshots/")
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-    maven("https://reposilite.atlasengine.ca/public")
 
 }
 
@@ -23,10 +22,11 @@ repositories {
 
 
 dependencies {
-    compileOnly("com.google.code.gson:gson:2.10.1")
-    compileOnly ("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly("com.google.code.gson:gson:2.13.2")
+    compileOnly ("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
     implementation("net.minestom:minestom:2025.09.13-1.21.8")
+    //implementation("net.minestom:minestom:2026.01.01-1.21.11")
     implementation("org.yaml:snakeyaml:2.2")
     implementation("de.articdive:jnoise-pipeline:4.1.0")
     implementation("com.dfsek.terra:minestom:6.6.5-BETA+1ef12fdec")
@@ -34,9 +34,9 @@ dependencies {
     implementation("org.tinylog:tinylog-api:2.6.2")
     implementation("org.tinylog:slf4j-tinylog:2.6.2")
     implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("com.ezylang:EvalEx:3.5.0")
-    implementation("org.openjdk.nashorn:nashorn-core:15.4")
-    implementation("jakarta.json:jakarta.json-api:2.1.2")
+    implementation("com.ezylang:EvalEx:3.6.0")
+    implementation("org.openjdk.nashorn:nashorn-core:15.7")
+    implementation("jakarta.json:jakarta.json-api:2.1.3")
     implementation("org.apache.commons:commons-math3:3.6.1")
     implementation("io.netty:netty-all:4.2.9.Final")
     

@@ -78,7 +78,7 @@ public class RoleMainUi implements IConfig {
             List<String> data = callData.getData();
             Player player = callData.getPlayer();
             if(data.isEmpty()) return;
-            Main.getLogger().debug("收到包 {} | {}", identifier, data);
+            Main.getLogger().debug("Role:Main 收到包 {} | {}", identifier, data);
             if(player instanceof RPGPlayer rpgPlayer){
                 switch (identifier){
                     //玩家查看角色包

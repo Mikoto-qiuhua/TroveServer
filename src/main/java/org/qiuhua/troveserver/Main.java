@@ -9,6 +9,7 @@ import org.qiuhua.troveserver.arcartx.ArcartX;
 import org.qiuhua.troveserver.command.ServerCommand;
 import org.qiuhua.troveserver.config.ConfigManager;
 import org.qiuhua.troveserver.config.ServerConfig;
+import org.qiuhua.troveserver.module.space.ItemSpaceManager;
 import org.qiuhua.troveserver.module.mob.MobManager;
 import org.qiuhua.troveserver.player.RPGPlayerProvider;
 import org.qiuhua.troveserver.listener.GlobalListener;
@@ -67,6 +68,7 @@ public class Main {
         PlayerModeManager.init();
         RoleManager.init();
         MobManager.init();
+        ItemSpaceManager.init();
         ArcartX.init();
         new GlobalListener(); //创建基础的监听器
 

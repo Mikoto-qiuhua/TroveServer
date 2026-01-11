@@ -87,6 +87,13 @@ public class UISetting {
     private String level = "0";
 
     /**
+     * 设置为false后将响应原版界面尺寸设置
+     */
+    @Getter @Setter
+    @SerializedName(value="screenScale")
+    private boolean screenScale = false;
+
+    /**
      * UI动作配置
      */
     @Getter @Setter
